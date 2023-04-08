@@ -1,8 +1,10 @@
 from flask import Flask, jsonify
-from kabir_dohas import dohas
+from flask_cors import CORS
+from db.kabir_dohas import dohas
 import random
 
 app = Flask(__name__)
+CORS(app, origins=["https://bnjr.github.io"])
 
 @app.route("/doha", methods=["GET"])
 def get_doha():
