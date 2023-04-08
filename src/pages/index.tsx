@@ -54,7 +54,7 @@ const Home = () => {
                 <span className='ml-2'>Loading...</span>
               </div>
             ) : (
-              'Get Another Doha'
+              "Get Another Doha"
             )}
           </button>
         </div>
