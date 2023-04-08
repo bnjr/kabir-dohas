@@ -1,2 +1,2 @@
-# kabir_dohas
+# kabir-dohas
 Kabir doha repo
