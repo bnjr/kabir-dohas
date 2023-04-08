@@ -28,7 +28,7 @@ const Home = () => {
       {dohaData && (
         <div className='bg-white shadow-xl rounded-lg p-8 max-w-2xl w-full'>
           <h1 className='text-2xl font-semibold mb-4 text-indigo-700'>
-            Kabir's Doha
+            {"Kabir's Doha"}
           </h1>
           <div className='border-t border-b border-indigo-300 py-4 mb-4'>
             <p className='text-xl font-semibold text-indigo-800 whitespace-pre-wrap'>
