@@ -1,4 +1,4 @@
-import Spinner from './Spinner1'
+import Spinner from './Spinner'
 
 interface DohaData {
   Doha: string
