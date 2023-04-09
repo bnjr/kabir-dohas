@@ -28,7 +28,7 @@ const Home = () => {
   return (
     <>
       <Head>
-        <title>Kabir's Dohas</title>
+        <title>{"Kabir's Dohas"}</title>
         <meta
           name='description'
           content="Discover the wisdom of Kabir's Dohas, translated and explained."
