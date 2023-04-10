@@ -1,11 +1,7 @@
 import {useState, useEffect} from 'react'
+import {DohaData} from '../types/types'
 import DohaDisplay from '../components/DohaDisplay'
 import SEOHead from '../components/SEOHead'
-interface DohaData {
-  Doha: string
-  EN: string
-  Meaning: string
-}
 
 const Home = () => {
   const [dohaData, setDohaData] = useState<DohaData | null>(null)

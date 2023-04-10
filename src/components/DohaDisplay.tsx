@@ -1,10 +1,6 @@
+import {DohaData} from '../types/types'
+import DohaContent from './DohaContent'
 import Spinner from './Spinner'
-
-interface DohaData {
-  Doha: string
-  EN: string
-  Meaning: string
-}
 
 interface DohaDisplayProps {
   dohaData: DohaData | null
@@ -18,24 +14,11 @@ const DohaDisplay: React.FC<DohaDisplayProps> = ({
   fetchDoha,
 }) => {
   return (
-    dohaData && (
-      <div className='bg-white shadow-xl rounded-lg p-8 max-w-2xl w-full mb-8'>
-        <h1 className='text-2xl font-semibold mb-4 text-indigo-700'>
-          {"Kabir's Doha"}
-        </h1>
-        <div className='border-t border-b border-indigo-300 py-4 mb-4'>
-          <p className='text-xl font-semibold text-indigo-800 whitespace-pre-wrap'>
-            {dohaData.Doha}
-          </p>
-        </div>
-        <h2 className='text-lg font-semibold mb-2 text-indigo-700'>
-          Translation
-        </h2>
-        <p className='mb-4 text-gray-800'>{dohaData.EN}</p>
-        <h2 className='text-lg font-semibold mb-2 text-indigo-700'>Meaning</h2>
-        <p className='text-gray-800'>{dohaData.Meaning}</p>
+    <>
+      <DohaContent dohaData={dohaData} />
+      <div className='flex justify-center'>
         <button
-          className='mt-4 px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50'
+          className='mt-4 w-auto px-4 py-2 bg-indigo-400 text-white rounded hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50'
           onClick={fetchDoha}
           disabled={loading}
         >
@@ -49,7 +32,7 @@ const DohaDisplay: React.FC<DohaDisplayProps> = ({
           )}
         </button>
       </div>
-    )
+    </>
   )
 }
 
