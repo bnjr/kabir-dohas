@@ -6,7 +6,7 @@ const AboutSection: React.FC = () => {
         This website is dedicated to sharing the wisdom of Kabir, a 15th-century
         Indian mystic poet and saint. His poetry, known as Dohas, consists of
         couplets that convey deep philosophical and spiritual messages. Our goal
-        is to help spread Kabir\'s teachings to a wider audience, making his
+        is to help spread Kabir&apos;s teachings to a wider audience, making his
         wisdom accessible to all.
       </p>
     </div>
