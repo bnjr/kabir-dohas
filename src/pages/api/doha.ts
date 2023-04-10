@@ -8,9 +8,12 @@ const AIRTABLE_TABLE_NAME = 'Dohas'
 const base = new Airtable({apiKey: AIRTABLE_API_KEY}).base(AIRTABLE_BASE_ID)
 
 let lastRandomOffset: number | null = null
+let totalRecords: number | null = null
 
-const getRandomDoha = async () => {
-  const totalRecords = await base(AIRTABLE_TABLE_NAME)
+const getTotalRecords = async () => {
+  console.log('getTotalRecords Called')
+
+  const records = await base(AIRTABLE_TABLE_NAME)
     .select({
       maxRecords: 1,
       view: 'Grid view',
@@ -19,14 +22,22 @@ const getRandomDoha = async () => {
     })
     .all()
 
-  const total = (totalRecords[0].fields['Count'] as number) ?? 0
+  return (records[0].fields['Count'] as number) ?? 0
+}
+
+const getRandomDoha = async () => {
+  console.log('getRandomDoha Called')
+  
+  if (totalRecords === null) {
+    totalRecords = await getTotalRecords()
+  }
 
   let randomOffset
   do {
-    randomOffset = Math.floor(Math.random() * (total - 1)) + 1
+    randomOffset = Math.floor(Math.random() * (totalRecords - 1)) + 1
   } while (randomOffset === lastRandomOffset)
   lastRandomOffset = randomOffset
-  
+
   const records = await base(AIRTABLE_TABLE_NAME)
     .select({
       maxRecords: 1,
