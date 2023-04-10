@@ -1,18 +1,13 @@
 // pages/doha/[id].tsx
-import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import {useRouter} from 'next/router'
+import {useEffect, useState} from 'react'
 import SEOHead from '../../components/SEOHead'
 import DohaDisplaySingle from '@/components/DohaDisplaySingle'
-
-interface DohaData {
-  Doha: string
-  EN: string
-  Meaning: string
-}
+import {DohaData} from '../../types/types'
 
 const DohaPage: React.FC = () => {
   const router = useRouter()
-  const { id } = router.query
+  const {id} = router.query
 
   const [dohaData, setDohaData] = useState<DohaData | null>(null)
 
