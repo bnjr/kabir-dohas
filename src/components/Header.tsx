@@ -40,7 +40,7 @@ const Header = () => {
       <div className='relative flex justify-between items-center'>
         <div className='text-2xl font-semibold'>
           <Link href='/'>
-            <div className='cursor-pointer'>Kabir's Dohas</div>
+            <div className='cursor-pointer'>{"Kabir's"} Dohas</div>
           </Link>
         </div>
         <button
