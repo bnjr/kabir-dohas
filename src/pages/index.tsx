@@ -1,7 +1,6 @@
 import {useState, useEffect} from 'react'
-import DohaDisplay from './components/DohaDisplay'
-import AboutSection from './components/AboutSection'
-import SEOHead from './components/SEOHead'
+import DohaDisplay from '../components/DohaDisplay'
+import SEOHead from '../components/SEOHead'
 interface DohaData {
   Doha: string
   EN: string
@@ -27,14 +26,11 @@ const Home = () => {
   return (
     <>
       <SEOHead />
-      <div className='min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-indigo-500 via-indigo-600 to-indigo-700 p-4'>
-        <DohaDisplay
-          dohaData={dohaData}
-          loading={loading}
-          fetchDoha={fetchDoha}
-        />
-        <AboutSection />
-      </div>
+      <DohaDisplay
+        dohaData={dohaData}
+        loading={loading}
+        fetchDoha={fetchDoha}
+      />
     </>
   )
 }
