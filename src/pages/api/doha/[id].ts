@@ -1,3 +1,4 @@
+// /api/doha/[id].ts
 import {NextApiRequest, NextApiResponse} from 'next'
 import Airtable from 'airtable'
 
@@ -7,39 +8,13 @@ const AIRTABLE_TABLE_NAME = 'Dohas'
 
 const base = new Airtable({apiKey: AIRTABLE_API_KEY}).base(AIRTABLE_BASE_ID)
 
-let lastRandomOffset: number | null = null
-let totalRecords: number | null = null
-
-const getTotalRecords = async () => {
-  const records = await base(AIRTABLE_TABLE_NAME)
-    .select({
-      maxRecords: 1,
-      view: 'Grid view',
-      fields: ['ID'],
-      sort: [{field: 'ID', direction: 'desc'}],
-    })
-    .all()
-
-  return (records[0].fields['ID'] as number) ?? 0
-}
-
-const getRandomDoha = async () => {
-  if (totalRecords === null) {
-    totalRecords = await getTotalRecords()
-  }
-
-  let randomOffset
-  do {
-    randomOffset = Math.floor(Math.random() * (totalRecords - 1)) + 1
-  } while (randomOffset === lastRandomOffset)
-  lastRandomOffset = randomOffset
-
+const getDohaById = async (id: string) => {
   const records = await base(AIRTABLE_TABLE_NAME)
     .select({
       maxRecords: 1,
       view: 'Grid view',
       fields: ['ID', 'Doha', 'EN', 'Meaning'],
-      filterByFormula: `{ID} = ${randomOffset}`,
+      filterByFormula: `{ID} = ${id}`,
     })
     .all()
 
@@ -47,9 +22,11 @@ const getRandomDoha = async () => {
 }
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
+  const {id} = req.query
+
   if (req.method === 'GET') {
     try {
-      const doha = await getRandomDoha()
+      const doha = await getDohaById(id as string)
       res.status(200).json(doha)
     } catch (error) {
       res.status(500).json({error: 'Failed to fetch doha'})
