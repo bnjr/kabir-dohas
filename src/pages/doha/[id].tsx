@@ -10,6 +10,7 @@ const DohaPage: React.FC = () => {
   const {id} = router.query
 
   const [dohaData, setDohaData] = useState<DohaData | null>(null)
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     if (id) {
@@ -18,15 +19,17 @@ const DohaPage: React.FC = () => {
   }, [id])
 
   const fetchDoha = async (dohaId: string) => {
+    setLoading(true)
     const response = await fetch(`/api/doha/${dohaId}`)
     const data: DohaData = await response.json()
     setDohaData(data)
+    setLoading(false)
   }
 
   return (
     <>
       <SEOHead />
-      {dohaData && <DohaDisplaySingle dohaData={dohaData} />}
+      {dohaData && <DohaDisplaySingle dohaData={dohaData} loading={loading} />}
     </>
   )
 }

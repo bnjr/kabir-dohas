@@ -1,11 +1,17 @@
-// components/ShareButtons.tsx
 import React from 'react'
 import {
   FacebookShareButton,
   TwitterShareButton,
-  LinkedinShareButton,
+  WhatsappShareButton,
 } from 'react-share'
-import {FacebookIcon, TwitterIcon, LinkedinIcon} from 'react-share'
+import {
+  FacebookIcon,
+  TwitterIcon,
+  WhatsappIcon,
+} from 'react-share'
+import copy from 'copy-to-clipboard'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faCopy} from '@fortawesome/free-solid-svg-icons'
 
 interface ShareButtonsProps {
   url: string
@@ -18,6 +24,11 @@ const ShareButtons: React.FC<ShareButtonsProps> = ({
   title,
   description,
 }) => {
+  const handleCopyLink = () => {
+    copy(url)
+    alert('Link copied to clipboard!')
+  }
+
   return (
     <div className='flex'>
       <FacebookShareButton
@@ -30,9 +41,27 @@ const ShareButtons: React.FC<ShareButtonsProps> = ({
       <TwitterShareButton url={url} title={title} className='mr-2'>
         <TwitterIcon size={32} round />
       </TwitterShareButton>
-      <LinkedinShareButton url={url} title={title} summary={description}>
-        <LinkedinIcon size={32} round />
-      </LinkedinShareButton>
+      <WhatsappShareButton url={url} title={title} className='mr-2'>
+        <WhatsappIcon size={32} round />
+      </WhatsappShareButton>
+      <button
+        onClick={handleCopyLink}
+        className='focus:outline-none cursor-pointer mr-2'
+        style={{
+          backgroundColor: 'darkgrey',
+          borderRadius: '50%',
+          border: '1px solid #ccc',
+          padding: '5px',
+          display: 'inline-flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          width: '32px',
+          height: '32px',
+          color: 'gray'
+        }}
+      >
+        <FontAwesomeIcon icon={faCopy} size='lg' color='white'/>
+      </button>
     </div>
   )
 }
