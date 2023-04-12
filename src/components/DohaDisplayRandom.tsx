@@ -8,14 +8,14 @@ interface DohaDisplayProps {
   fetchDoha: () => Promise<void>
 }
 
-const DohaDisplay: React.FC<DohaDisplayProps> = ({
+const DohaDisplayRandom: React.FC<DohaDisplayProps> = ({
   dohaData,
   loading,
   fetchDoha,
 }) => {
   return (
     <>
-      <DohaContent dohaData={dohaData} />
+      <DohaContent dohaData={dohaData} loading={loading} />
       <div className='flex justify-center'>
         <button
           className='mt-4 w-auto px-4 py-2 bg-indigo-400 text-white rounded hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50'
@@ -36,4 +36,4 @@ const DohaDisplay: React.FC<DohaDisplayProps> = ({
   )
 }
 
-export default DohaDisplay
+export default DohaDisplayRandom

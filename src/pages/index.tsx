@@ -1,6 +1,6 @@
 import {useState, useEffect} from 'react'
 import {DohaData} from '../types/types'
-import DohaDisplay from '../components/DohaDisplay'
+import DohaDisplayRandom from '../components/DohaDisplayRandom'
 import SEOHead from '../components/SEOHead'
 
 const Home = () => {
@@ -22,7 +22,7 @@ const Home = () => {
   return (
     <>
       <SEOHead />
-      <DohaDisplay
+      <DohaDisplayRandom
         dohaData={dohaData}
         loading={loading}
         fetchDoha={fetchDoha}

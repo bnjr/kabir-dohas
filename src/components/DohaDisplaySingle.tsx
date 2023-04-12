@@ -3,12 +3,16 @@ import DohaContent from './DohaContent'
 
 interface DohaDisplaySingleProps {
   dohaData: DohaData | null
+  loading: boolean
 }
 
-const DohaDisplaySingle: React.FC<DohaDisplaySingleProps> = ({dohaData}) => {
+const DohaDisplaySingle: React.FC<DohaDisplaySingleProps> = ({
+  dohaData,
+  loading,
+}) => {
   return (
     <>
-      <DohaContent dohaData={dohaData} />
+      <DohaContent dohaData={dohaData} loading={loading} />
     </>
   )
 }

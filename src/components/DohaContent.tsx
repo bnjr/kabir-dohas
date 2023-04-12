@@ -1,20 +1,26 @@
 import {DohaData} from '../types/types'
 import ShareButtons from './ShareButtons'
-
+import DohaSkeleton from './DohaSkeleton'
 interface DohaContentProps {
   dohaData: DohaData | null
+  loading: boolean
 }
 
-const DohaContent: React.FC<DohaContentProps> = ({dohaData}) => {
+const DohaContent: React.FC<DohaContentProps> = ({dohaData, loading}) => {
+  if (loading) {
+    return <DohaSkeleton />
+  }
   return (
     dohaData && (
       <div className='bg-white shadow-xl rounded-lg p-8 max-w-2xl w-full mb-8'>
         <div className='flex justify-between items-start'>
-          <h1 className='text-2xl font-semibold mb-4 text-indigo-700'>
-            Doha
-          </h1>
+          <h1 className='text-2xl font-semibold mb-4 text-indigo-700'>Doha</h1>
           <ShareButtons
-            url={typeof window !== 'undefined' ? window.location.href : ''}
+            url={
+              typeof window !== 'undefined'
+                ? `${window.location.origin}/doha/${dohaData.ID}`
+                : ''
+            }
             title={`Kabir's Doha: ${dohaData.Doha}`}
             description={dohaData.EN}
           />
