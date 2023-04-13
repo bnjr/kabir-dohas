@@ -1,27 +1,31 @@
-// components/SEOHead.tsx
 import Head from 'next/head'
 
-const SEOHead = () => {
+interface SEOHeadProps {
+  title?: string
+  description?: string
+  keywords?: string
+  imageUrl?: string
+  url?: string
+}
+
+const SEOHead: React.FC<SEOHeadProps> = ({
+  title = "Kabir's Dohas",
+  description = "Discover the wisdom of Kabir's Dohas, translated and explained.",
+  keywords = 'Kabir, Dohas, Translation, Meaning',
+  imageUrl = 'images/kabir.png',
+  url = 'https://kabir-dohas.vercel.app/',
+}) => {
   return (
     <Head>
-      <title>{"Kabir's Dohas"}</title>
-      <meta
-        name='description'
-        content="Discover the wisdom of Kabir's Dohas, translated and explained."
-      />
-      <meta name='keywords' content='Kabir, Dohas, Translation, Meaning' />
+      <title>{title}</title>
+      <meta name='description' content={description} />
+      <meta name='keywords' content={keywords} />
       <meta name='viewport' content='width=device-width, initial-scale=1.0' />
-      <meta property='og:title' content="Kabir's Dohas" />
-      <meta
-        property='og:description'
-        content="Discover the wisdom of Kabir's Dohas, translated and explained."
-      />
-      <meta
-        property='og:image'
-        content='https://kabir-dohas.vercel.app/images/kabir.png'
-      />
+      <meta property='og:title' content={title} />
+      <meta property='og:description' content={description} />
+      <meta property='og:image' content={imageUrl} />
       <meta property='og:type' content='website' />
-      <link rel='canonical' href='https://kabir-dohas.vercel.app/' />
+      <link rel='canonical' href={url} />
     </Head>
   )
 }
