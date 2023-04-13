@@ -28,7 +28,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
     const {id} = context.query
     const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL
+    console.log({apiUrl})
     const response = await fetch(`${apiUrl}/api/doha/${id}`)
+    console.log({response})
 
     if (!response.ok) {
       throw new Error('Doha not found')
