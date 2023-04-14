@@ -1,6 +1,6 @@
 import {DohaData} from '../types/types'
 import ShareButtons from './ShareButtons'
-import DohaSkeleton from './DohaSkeleton'
+import DohaContentSkeleton from './DohaContentSkeleton'
 interface DohaContentProps {
   dohaData: DohaData | null
   loading: boolean
@@ -8,7 +8,7 @@ interface DohaContentProps {
 
 const DohaContent: React.FC<DohaContentProps> = ({dohaData, loading}) => {
   if (loading) {
-    return <DohaSkeleton />
+    return <DohaContentSkeleton />
   }
   return (
     dohaData && (

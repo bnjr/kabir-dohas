@@ -3,6 +3,7 @@ import {useRouter} from 'next/router'
 import {DohaData} from '../../types/types'
 import SEOHead from '../../components/SEOHead'
 import DohaDisplaySingle from '@/components/DohaDisplaySingle'
+import DohaPageButtons from '@/components/DohaPageButtons'
 
 interface DohaPageProps {
   dohaData: DohaData
@@ -20,6 +21,7 @@ const DohaPage: React.FC<DohaPageProps> = ({dohaData}) => {
         url={`https://kabir-dohas.vercel.app/doha/${id}`}
       />
       {dohaData && <DohaDisplaySingle dohaData={dohaData} loading={false} />}
+      <DohaPageButtons />
     </>
   )
 }
@@ -28,9 +30,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
     const {id} = context.query
     const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL
-    console.log({apiUrl})
     const response = await fetch(`${apiUrl}/api/doha/${id}`)
-    console.log({response})
 
     if (!response.ok) {
       throw new Error('Doha not found')
