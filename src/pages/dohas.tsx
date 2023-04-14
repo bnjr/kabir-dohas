@@ -66,9 +66,7 @@ const DohasPage = () => {
       <div className='mt-8'>
         {loading && initialLoad.current ? skeletons : null}
         {dohas.map((doha) => (
-          // <Link key={doha.ID} href={`/doha/${doha.ID}`}>
-          <Doha dohaData={doha} loading={false} />
-          // </Link>
+          <Doha key={doha.ID} dohaData={doha} loading={false} />
         ))}
         {loading && !initialLoad.current ? skeletons : null}
       </div>
