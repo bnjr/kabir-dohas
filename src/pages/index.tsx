@@ -1,6 +1,7 @@
-import DohaDisplayRandom from '../components/DohaDisplayRandom'
 import SEOHead from '../components/SEOHead'
 import useRandomDoha from '@/hooks/useRandomDoha'
+import DohaDisplaySingle from '@/components/DohaDisplaySingle'
+import HomePageButtons from '@/components/HomePageButtons'
 
 const Home = () => {
   const {dohaData, loading, error, fetchRandomDoha} = useRandomDoha()
@@ -13,12 +14,9 @@ const Home = () => {
           An error occurred: {error}
         </div>
       ) : (
-        <DohaDisplayRandom
-          dohaData={dohaData}
-          loading={loading}
-          fetchRandomDoha={fetchRandomDoha}
-        />
+        <DohaDisplaySingle dohaData={dohaData} loading={loading} />
       )}
+      <HomePageButtons fetchRandomDoha={fetchRandomDoha} />
     </>
   )
 }
