@@ -2,6 +2,7 @@ import {DohaData} from '../types/types'
 import ShareButtons from './ShareButtons'
 import DohaSkeleton from './DohaSkeleton'
 import Link from 'next/link'
+import styles from '../styles/components/shareButtons.module.css'
 interface DohaProps {
   dohaData: DohaData | null
   loading: boolean
@@ -20,16 +21,17 @@ const Doha: React.FC<DohaProps> = ({dohaData, loading}) => {
               {dohaData.Doha}
             </p>
           </Link>
-
-          <ShareButtons
-            url={
-              typeof window !== 'undefined'
-                ? `${window.location.origin}/doha/${dohaData.ID}`
-                : ''
-            }
-            title={`Kabir's Doha: ${dohaData.Doha}`}
-            description={dohaData.EN}
-          />
+          <div className={styles.hideOnSmallScreens}>
+            <ShareButtons
+              url={
+                typeof window !== 'undefined'
+                  ? `${window.location.origin}/doha/${dohaData.ID}`
+                  : ''
+              }
+              title={`Kabir's Doha: ${dohaData.Doha}`}
+              description={dohaData.EN}
+            />
+          </div>
         </div>
       </div>
     )
