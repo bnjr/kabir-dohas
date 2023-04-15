@@ -13,12 +13,12 @@ const AboutSection: React.FC = () => {
         The development of this website was made possible with the help of
         ChatGPT, an AI language model by OpenAI. Utilizing the power of AI, we
         were able to design, develop, and create a user-friendly platform that
-        showcases Kabir's Dohas. This collaboration highlights the potential of
+        showcases Kabir&apos;s Dohas. This collaboration highlights the potential of
         AI in assisting with various aspects of web development, enabling us to
         create a unique and engaging user experience.
       </p>
       <p className='text-gray-800 mt-4'>
-        The website's source code is open source, and we welcome contributions
+        The website&apos;s source code is open source, and we welcome contributions
         from the community. You can view the repository, submit issues, and
         contribute to the project on{' '}
         <a
