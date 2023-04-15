@@ -5,7 +5,6 @@ import {faBars} from '@fortawesome/free-solid-svg-icons'
 
 const menuItems = [
   {label: 'About', href: '/about'},
-  {label: 'Contact Us', href: 'mailto:contact@kabirsdohas.com'},
 ]
 
 const useOutsideClick = (ref: RefObject<HTMLElement>, callback: () => void) => {
@@ -52,7 +51,7 @@ const Header = () => {
         {isOpen && (
           <nav
             ref={menuRef}
-            className='absolute top-12 right-0 bg-white shadow-md rounded-lg text-black w-48'
+            className='absolute top-12 right-0 bg-white shadow-md rounded-lg text-black w-48 z-10'
           >
             <ul className='flex flex-col space-y-2 p-4'>
               {menuItems.map((item) => (
