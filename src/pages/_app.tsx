@@ -4,12 +4,15 @@ import type {AppProps} from 'next/app'
 import MainLayout from '../components/layouts/MainLayout'
 import {config} from '@fortawesome/fontawesome-svg-core'
 import '@fortawesome/fontawesome-svg-core/styles.css'
+import {AuthProvider} from '@/context/AuthContext'
 config.autoAddCss = false
 
 export default function App({Component, pageProps}: AppProps) {
   return (
-    <MainLayout>
-      <Component {...pageProps} />
-    </MainLayout>
+    <AuthProvider>
+      <MainLayout>
+        <Component {...pageProps} />
+      </MainLayout>
+    </AuthProvider>
   )
 }
