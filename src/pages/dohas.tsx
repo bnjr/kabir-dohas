@@ -1,7 +1,6 @@
 import {useState, useEffect, useRef} from 'react'
 import {DohaData} from '@/types/types'
 import SEOHead from '@/components/SEOHead'
-import Link from 'next/link'
 import Doha from '@/components/Doha'
 import DohasPageButtons from '@/components/DohasPageButtons'
 import useWindowHeight from '@/hooks/useWindowHeight'

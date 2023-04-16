@@ -1,7 +1,7 @@
 import React, {createContext, useContext, useEffect, useState} from 'react'
 import {onAuthStateChanged, User} from 'firebase/auth'
 import {signInWithPopup, GoogleAuthProvider, signOut} from 'firebase/auth'
-import auth from '../lib/firebaseConfig'
+import {auth} from '@/lib/firebaseConfig'
 
 interface AuthContextProps {
   user: User | null
