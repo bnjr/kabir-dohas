@@ -4,3 +4,8 @@ export interface DohaData {
   EN: string
   Meaning: string
 }
+
+export interface Favorite {
+  userId: string;
+  dohaId: string;
+}

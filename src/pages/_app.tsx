@@ -5,14 +5,17 @@ import MainLayout from '../components/layouts/MainLayout'
 import {config} from '@fortawesome/fontawesome-svg-core'
 import '@fortawesome/fontawesome-svg-core/styles.css'
 import {AuthProvider} from '@/context/AuthContext'
+import {FavoriteProvider} from '@/context/FavoriteContext'
 config.autoAddCss = false
 
 export default function App({Component, pageProps}: AppProps) {
   return (
     <AuthProvider>
-      <MainLayout>
-        <Component {...pageProps} />
-      </MainLayout>
+      <FavoriteProvider>
+        <MainLayout>
+          <Component {...pageProps} />
+        </MainLayout>
+      </FavoriteProvider>
     </AuthProvider>
   )
 }
