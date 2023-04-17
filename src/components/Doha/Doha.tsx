@@ -1,7 +1,7 @@
-import {DohaData} from '../types/types'
+import {DohaData} from '../../types/types'
 import DohaSkeleton from './DohaSkeleton'
 import Link from 'next/link'
-import DohaActions from './DohaActions'
+import DohaActions from './Actions/DohaActions'
 interface DohaProps {
   dohaData: DohaData
   loading: boolean

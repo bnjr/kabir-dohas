@@ -1,7 +1,7 @@
 // pages/about.tsx
 import React from 'react'
-import AboutSection from '../components/AboutSection'
-import SEOHead from '../components/SEOHead'
+import AboutSection from '../components/Header/Burger/AboutSection'
+import SEOHead from '../components/SEO/SEOHead'
 
 const AboutPage: React.FC = () => {
   return (

@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react'
 import {useAuth} from '@/context/AuthContext'
 import {DohaData} from '@/types/types'
-import Doha from '@/components/Doha'
+import Doha from '@/components/Doha/Doha'
 import {useFavorite} from '@/context/FavoriteContext'
-import Spinner from '@/components/Spinner'
+import Spinner from '@/components/Utils/Spinner'
 
 const fetchDohaById = async (id: string): Promise<DohaData> => {
   const response = await fetch(`/api/doha/${id}`)

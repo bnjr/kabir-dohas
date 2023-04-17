@@ -1,7 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
-import ProfileMenu from './ProfileMenu'
-import BurgerMenu from './BurgerMenu'
+import ProfileMenu from './Profile/ProfileMenu'
+import BurgerMenu from './Burger/BurgerMenu'
 
 const Header = () => {
   return (

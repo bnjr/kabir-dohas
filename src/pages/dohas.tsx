@@ -1,10 +1,10 @@
 import {useState, useEffect, useRef} from 'react'
 import {DohaData} from '@/types/types'
-import SEOHead from '@/components/SEOHead'
-import Doha from '@/components/Doha'
-import DohasPageButtons from '@/components/DohasPageButtons'
+import SEOHead from '@/components/SEO/SEOHead'
+import Doha from '@/components/Doha/Doha'
+import DohasPageButtons from '@/components/Page/DohasPageButtons'
 import useWindowHeight from '@/hooks/useWindowHeight'
-import DohaSkeleton from '@/components/DohaSkeleton'
+import DohaSkeleton from '@/components/Doha/DohaSkeleton'
 
 const DohasPage = () => {
   const [dohas, setDohas] = useState<DohaData[]>([])

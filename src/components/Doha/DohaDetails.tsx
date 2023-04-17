@@ -1,15 +1,15 @@
-import {DohaData} from '../types/types'
-import DohaContentSkeleton from './DohaContentSkeleton'
-import DohaActions from './DohaActions'
+import {DohaData} from '../../types/types'
+import DohaDetailsSkeleton from './DohaDetailsSkeleton'
+import DohaActions from './Actions/DohaActions'
 
-interface DohaContentProps {
+interface DohaDetailsProps {
   dohaData: DohaData | null
   loading: boolean
 }
 
-const DohaContent: React.FC<DohaContentProps> = ({dohaData, loading}) => {
+const DohaDetails: React.FC<DohaDetailsProps> = ({dohaData, loading}) => {
   if (loading) {
-    return <DohaContentSkeleton />
+    return <DohaDetailsSkeleton />
   }
   return (
     dohaData && (
@@ -35,4 +35,4 @@ const DohaContent: React.FC<DohaContentProps> = ({dohaData, loading}) => {
   )
 }
 
-export default DohaContent
+export default DohaDetails
