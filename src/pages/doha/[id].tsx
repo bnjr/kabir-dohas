@@ -1,9 +1,9 @@
 import {GetServerSideProps} from 'next'
 import {useRouter} from 'next/router'
 import {DohaData} from '../../types/types'
-import SEOHead from '../../components/SEOHead'
-import DohaPageButtons from '@/components/DohaPageButtons'
-import DohaContent from '@/components/DohaContent'
+import SEOHead from '../../components/SEO/SEOHead'
+import DohaPageButtons from '@/components/Page/DohaPageButtons'
+import DohaDetails from '@/components/Doha/DohaDetails'
 
 interface DohaPageProps {
   dohaData: DohaData
@@ -20,7 +20,7 @@ const DohaPage: React.FC<DohaPageProps> = ({dohaData}) => {
         description={`Read and understand Kabir's Doha: "${dohaData.EN}".`}
         url={`https://kabir-dohas.vercel.app/doha/${id}`}
       />
-      {dohaData && <DohaContent dohaData={dohaData} loading={false} />}
+      {dohaData && <DohaDetails dohaData={dohaData} loading={false} />}
       <DohaPageButtons />
     </>
   )
