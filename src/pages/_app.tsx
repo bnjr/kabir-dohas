@@ -1,6 +1,7 @@
 // pages/_app.tsx
-import '@/styles/globals.css'
 import type {AppProps} from 'next/app'
+import {Analytics} from '@vercel/analytics/react'
+import '@/styles/globals.css'
 import MainLayout from '../components/layouts/MainLayout'
 import {config} from '@fortawesome/fontawesome-svg-core'
 import '@fortawesome/fontawesome-svg-core/styles.css'
