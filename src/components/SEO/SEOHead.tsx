@@ -25,6 +25,7 @@ const SEOHead: React.FC<SEOHeadProps> = ({
       <meta property='og:description' content={description} />
       <meta property='og:image' content={imageUrl} />
       <meta property='og:type' content='website' />
+      <meta name="google-site-verification" content="OS6SUdiQHrikkEoH_alhSZaTCM5F8LRptv3592L5Xlo" />
       <link rel='canonical' href={url} />
     </Head>
   )
