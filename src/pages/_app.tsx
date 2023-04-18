@@ -15,6 +15,7 @@ export default function App({Component, pageProps}: AppProps) {
       <FavoriteProvider>
         <MainLayout>
           <Component {...pageProps} />
+          <Analytics />
         </MainLayout>
       </FavoriteProvider>
     </AuthProvider>
