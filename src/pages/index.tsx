@@ -1,10 +1,21 @@
+import {useEffect, useState} from 'react'
 import SEOHead from '../components/SEO/SEOHead'
-import useRandomDoha from '@/hooks/useRandomDoha'
 import HomePageButtons from '@/components/Page/HomePageButtons'
-import DohaDetails from '@/components/Doha/DohaDetails'
+import Doha from '@/components/Doha/Doha'
+import useFetchDohas from '@/hooks/useFetchDohas'
+import {DohaData} from '@/types/types'
 
 const Home = () => {
-  const {dohaData, loading, error, fetchRandomDoha} = useRandomDoha()
+  const [dohaData, setDohaData] = useState<DohaData | null>(null)
+  const {loading, error, fetchRandomDoha} = useFetchDohas()
+
+  useEffect(() => {
+    const randomDoha = async () => {
+      const doha = await fetchRandomDoha()
+      if (doha) setDohaData(doha)
+    }
+    randomDoha()
+  }, [])
 
   return (
     <>
@@ -14,7 +25,7 @@ const Home = () => {
           An error occurred: {error}
         </div>
       ) : (
-        <DohaDetails dohaData={dohaData} loading={loading} />
+        <Doha dohaData={dohaData} loading={loading} details />
       )}
       <HomePageButtons fetchRandomDoha={fetchRandomDoha} />
     </>

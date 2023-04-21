@@ -2,6 +2,8 @@ import React from 'react'
 import FavoriteButton from './FavoriteButton'
 import ShareButtons from './ShareButtons'
 import {DohaData} from '@/types/types'
+import ViewCounter from './ViewCounter'
+import useDohaViews from '@/hooks/useDohaViews'
 
 interface DohaActionsProps {
   dohaData: DohaData
@@ -10,6 +12,7 @@ interface DohaActionsProps {
 const DohaActions: React.FC<DohaActionsProps> = ({dohaData}) => {
   return (
     <div className='flex items-center space-x-4 mt-6'>
+      <ViewCounter views={useDohaViews(dohaData.ID).views ?? 0} />
       <FavoriteButton dohaId={dohaData.ID} />
       <ShareButtons
         url={

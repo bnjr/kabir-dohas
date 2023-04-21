@@ -5,6 +5,9 @@ service cloud.firestore {
       allow read, update, delete: if request.auth != null && request.auth.uid == resource.data.userId;
       allow write: if request.auth != null && request.auth.uid == request.resource.data.userId;
     }
-    // Include rules for other collections, if any
+    match /dohaViews/{dohaId} {
+      allow read: if true;
+      allow create, update: if request.auth != null;
+    }
   }
 }

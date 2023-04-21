@@ -1,40 +1,64 @@
-import {useState, useEffect} from 'react'
+import {useState} from 'react'
 import {DohaData} from '@/types/types'
 
 interface FetchDohasOptions {
-  byIdList?: string[]
+  page?: number
+  itemsPerPage?: number
 }
 
-const useFetchDohas = (options: FetchDohasOptions = {}) => {
-  const {byIdList} = options
-  const [dohas, setDohas] = useState<DohaData[]>([])
+const useFetchDohas = () => {
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
-  useEffect(() => {
-    const fetchDohas = async () => {
-      setLoading(true)
+  const fetchDohas = async (options: FetchDohasOptions = {}) => {
+    const itemsPerPage = options.itemsPerPage ?? 5
+    const page = options.page ?? 1
+    setLoading(true)
+    setError(null)
 
-      let response
-      if (byIdList) {
-        response = await Promise.all(
-          byIdList.map(async (id) => {
-            const res = await fetch(`/api/doha/${id}`)
-            return await res.json()
-          })
-        )
-      } else {
-        response = await fetch('/api/dohas')
-        response = await response.json()
-      }
-
-      setDohas(response)
+    try {
+      const response = await fetch(
+        `/api/dohas?page=${page}&limit=${itemsPerPage}`
+      )
+      const dohas: DohaData[] = await response.json()
+      return dohas
+    } catch (error) {
+      setError((error as Error).message)
+    } finally {
       setLoading(false)
     }
+  }
 
-    fetchDohas()
-  }, [byIdList])
+  const fetchDoha = async (dohaId: string) => {
+    setLoading(true)
+    setError(null)
 
-  return {dohas, loading}
+    try {
+      const response = await fetch(`/api/doha/${dohaId}`)
+      const doha: DohaData = await response.json()
+      return doha
+    } catch (error) {
+      setError((error as Error).message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const fetchRandomDoha = async () => {
+    setLoading(true)
+    setError(null)
+    try {
+      const response = await fetch('/api/randomdoha')
+      const doha: DohaData = await response.json()
+      return doha
+    } catch (error) {
+      setError((error as Error).message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return {loading, error, fetchDohas, fetchDoha, fetchRandomDoha}
 }
 
 export default useFetchDohas
