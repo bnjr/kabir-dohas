@@ -1,26 +1,23 @@
 import {GetServerSideProps} from 'next'
-import {useRouter} from 'next/router'
 import {DohaData} from '../../types/types'
 import SEOHead from '../../components/SEO/SEOHead'
 import DohaPageButtons from '@/components/Page/DohaPageButtons'
-import DohaDetails from '@/components/Doha/DohaDetails'
+import Doha from '@/components/Doha/Doha'
 
 interface DohaPageProps {
   dohaData: DohaData
 }
 
 const DohaPage: React.FC<DohaPageProps> = ({dohaData}) => {
-  const router = useRouter()
-  const {id} = router.query
 
   return (
     <>
       <SEOHead
         title={`Kabir's Doha: ${dohaData.Doha}`}
         description={`Read and understand Kabir's Doha: "${dohaData.EN}".`}
-        url={`https://kabir-dohas.vercel.app/doha/${id}`}
+        url={`${process.env.NEXT_PUBLIC_BASE_URL}/doha/${dohaData.ID}`}
       />
-      {dohaData && <DohaDetails dohaData={dohaData} loading={false} />}
+      {dohaData && <Doha dohaData={dohaData} loading={false} details/>}
       <DohaPageButtons />
     </>
   )
