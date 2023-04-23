@@ -9,6 +9,8 @@ import {
   deleteDoc,
   addDoc,
   doc,
+  updateDoc,
+  increment,
 } from 'firebase/firestore'
 
 type FavoriteContextType = {
@@ -61,6 +63,30 @@ export const FavoriteProvider: React.FC<FavoriteProviderProps> = ({
     fetchFavorites()
   }, [user])
 
+  const updateFavoriteCount = async (
+    dohaId: string,
+    incrementValue: number
+  ) => {
+    const dohaViewsRef = collection(firestore, 'dohaViews')
+    const dohaViewsQuery = query(dohaViewsRef, where('dohaId', '==', dohaId))
+    const dohaViewSnapshot = await getDocs(dohaViewsQuery)
+
+    if (dohaViewSnapshot.empty) {
+      // Create a new document with the dohaId and set the initial view count to 1
+      await addDoc(dohaViewsRef, {
+        dohaId: dohaId,
+        views: 1,
+        favoriteCount: 1,
+      })
+    } else {
+      // Increment/decrement the favorite count of the existing document
+      const dohaViewDoc = dohaViewSnapshot.docs[0]
+      await updateDoc(doc(dohaViewsRef, dohaViewDoc.id), {
+        favoriteCount: increment(incrementValue),
+      })
+    }
+  }
+
   const toggleFavorite = async (dohaId: string) => {
     if (!user) {
       return
@@ -80,6 +106,8 @@ export const FavoriteProvider: React.FC<FavoriteProviderProps> = ({
         await deleteDoc(doc(firestore, 'favorites', favDoc.id))
       })
 
+      await updateFavoriteCount(dohaId, -1)
+
       setFavorites((prevFavorites) => {
         const updatedFavorites = {...prevFavorites}
         delete updatedFavorites[dohaId]
@@ -92,6 +120,7 @@ export const FavoriteProvider: React.FC<FavoriteProviderProps> = ({
         dohaId: dohaId,
       })
 
+      await updateFavoriteCount(dohaId, 1)
 
       setFavorites((prevFavorites) => ({
         ...prevFavorites,

@@ -13,15 +13,15 @@ const ViewCounter: React.FC<ViewCounterProps> = ({views}) => {
     return null
   }
   return (
-    <span className='text-gray-500'>
-      {views}
+    <div className='flex items-center space-x-1'>
+      <span className='text-xl text-gray-500'>{views}</span>
       <FontAwesomeIcon
         icon={faChartSimple}
         aria-label='Views'
         size='xl'
-        className='pl-2'
+        className='text-gray-500'
       />
-    </span>
+    </div>
   )
 }
 
