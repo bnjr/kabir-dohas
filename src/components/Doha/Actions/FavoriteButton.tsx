@@ -7,9 +7,13 @@ import {useAuth} from '@/context/AuthContext'
 
 interface FavoriteButtonProps {
   dohaId: string
+  favoriteCount: number
 }
 
-const FavoriteButton: React.FC<FavoriteButtonProps> = ({dohaId}) => {
+const FavoriteButton: React.FC<FavoriteButtonProps> = ({
+  dohaId,
+  favoriteCount,
+}) => {
   const {favorites, toggleFavorite} = useFavorite()
   const isFavorite = favorites[dohaId]
   const {user} = useAuth()
@@ -24,19 +28,22 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = ({dohaId}) => {
       await handleToggleFavorite()
     } else {
       setShowMessage(true)
-      setTimeout(() => setShowMessage(false), 2000) // Hide the message after 3 seconds
+      setTimeout(() => setShowMessage(false), 2000) // Hide the message after 2 seconds
     }
   }
   return (
     <div className='relative'>
-      <button onClick={handleClick}>
-        <FontAwesomeIcon
-          icon={isFavorite ? faSolidHeart : faRegularHeart}
-          className={isFavorite ? 'text-red-500' : 'text-black'}
-          aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
-          size='xl'
-        />
-      </button>
+      <div className='flex items-center space-x-1'>
+        <span className='text-xl text-gray-500'>{favoriteCount}</span>
+        <button onClick={handleClick}>
+          <FontAwesomeIcon
+            icon={isFavorite ? faSolidHeart : faRegularHeart}
+            className={isFavorite ? 'text-red-500' : 'text-gray-500'}
+            aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+            size='xl'
+          />
+        </button>
+      </div>
       {showMessage && (
         <div className='absolute top-full left-0 mt-1 p-2 rounded bg-red-500 text-white text-xs'>
           Sign in to add favorites

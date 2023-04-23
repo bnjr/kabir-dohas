@@ -10,10 +10,12 @@ interface DohaActionsProps {
 }
 
 const DohaActions: React.FC<DohaActionsProps> = ({dohaData}) => {
+  const {views, favoriteCount} = useDohaViews(dohaData.ID)
+
   return (
-    <div className='flex items-center space-x-4 mt-6'>
-      <ViewCounter views={useDohaViews(dohaData.ID).views ?? 0} />
-      <FavoriteButton dohaId={dohaData.ID} />
+    <div className='flex items-center space-x-3 mt-6'>
+      <ViewCounter views={views ?? 0} />
+      <FavoriteButton dohaId={dohaData.ID} favoriteCount={favoriteCount ?? 0} />
       <ShareButtons
         url={
           typeof window !== 'undefined'

@@ -48,21 +48,9 @@ const ShareButtons: React.FC<ShareButtonsProps> = ({
       <div className='relative mr-2'>
         <button
           onClick={handleCopyLink}
-          className='focus:outline-none cursor-pointer'
-          style={{
-            backgroundColor: 'darkgrey',
-            borderRadius: '50%',
-            border: '1px solid #ccc',
-            padding: '5px',
-            display: 'inline-flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            width: '32px',
-            height: '32px',
-            color: 'gray',
-          }}
+          className='focus:outline-none cursor-pointer bg-gray-500 text-white rounded-full border border-gray-300 p-1 w-8 h-8 flex items-center justify-center'
         >
-          <FontAwesomeIcon icon={faCopy} size='lg' color='white' />
+          <FontAwesomeIcon icon={faCopy} size='lg' />
         </button>
         {showCopiedMessage && (
           <span className='text-sm text-white absolute top-full mt-1 px-2 py-1 bg-gray-400 border border-gray-950 rounded'>
