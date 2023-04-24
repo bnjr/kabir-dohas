@@ -17,6 +17,11 @@ const Home = () => {
     randomDoha()
   }, [])
 
+  const handleGetRandomDoha = async () => {
+    const doha = await fetchRandomDoha()
+    if (doha) setDohaData(doha)
+  }
+
   return (
     <>
       <SEOHead />
@@ -27,7 +32,7 @@ const Home = () => {
       ) : (
         <Doha dohaData={dohaData} loading={loading} details />
       )}
-      <HomePageButtons fetchRandomDoha={fetchRandomDoha} />
+      <HomePageButtons fetchRandomDoha={handleGetRandomDoha} />
     </>
   )
 }
