@@ -2,7 +2,7 @@
 import type {AppProps} from 'next/app'
 import {Analytics} from '@vercel/analytics/react'
 import '@/styles/globals.css'
-import MainLayout from '../components/Layout/MainLayout'
+import MainLayout from '../components/Layouts/MainLayout'
 import {config} from '@fortawesome/fontawesome-svg-core'
 import '@fortawesome/fontawesome-svg-core/styles.css'
 import {AuthProvider} from '@/context/AuthContext'
