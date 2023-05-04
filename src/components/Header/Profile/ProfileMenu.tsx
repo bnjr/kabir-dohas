@@ -30,6 +30,8 @@ const ProfileMenu: React.FC = () => {
           <Image
             src={user.photoURL}
             alt='Profile'
+            width={30}
+            height={30}
             className='w-8 h-8 rounded-full border-2 border-indigo-300'
           />
         ) : (
