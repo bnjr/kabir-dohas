@@ -14,10 +14,7 @@ const getAllDohas = async (): Promise<any[]> => {
     base(AIRTABLE_TABLE_NAME)
       .select({
         view: 'Grid view',
-        fields: ['doha_hi'],
-        // fields: ['doha_en'],
-        // fields: ['meaning_en'],
-        // fields: ['doha_hi', 'doha_en', 'meaning_en'],
+        fields: ['id', 'doha_hi', 'doha_en', 'meaning_en'],
         sort: [{field: 'id', direction: 'asc'}],
       })
       .eachPage(

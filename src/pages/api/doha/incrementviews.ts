@@ -1,4 +1,4 @@
-// src/pages/api/doha/incrementViews.ts
+// src/pages/api/doha/incrementviews.ts
 
 import {NextApiRequest, NextApiResponse} from 'next'
 import {firestoreAdmin} from '@/lib/firebaseAdminConfig'
