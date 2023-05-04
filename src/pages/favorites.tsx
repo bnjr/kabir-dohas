@@ -57,7 +57,7 @@ const Favorites: React.FC = () => {
         </p>
       ) : (
         favoriteDohas.map((doha) => (
-          <Doha key={doha.ID} dohaData={doha} loading={false} />
+          <Doha key={doha.id} dohaData={doha} loading={false} />
         ))
       )}
     </div>

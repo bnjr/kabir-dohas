@@ -36,3 +36,6 @@ next-env.d.ts
 
 # firestore
 *-firebase-adminsdk-ddock-*.json
+
+# scratchpad
+/scratchpad

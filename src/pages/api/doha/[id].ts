@@ -13,8 +13,8 @@ const getDohaById = async (id: string) => {
     .select({
       maxRecords: 1,
       view: 'Grid view',
-      fields: ['ID', 'Doha', 'EN', 'Meaning'],
-      filterByFormula: `{ID} = ${id}`,
+      fields: ['id', 'doha_hi', 'doha_en', 'meaning_en'],
+      filterByFormula: `{id} = ${id}`,
     })
     .all()
 

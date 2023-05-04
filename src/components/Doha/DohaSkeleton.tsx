@@ -1,3 +1,4 @@
+import classNames from 'classnames'
 import React from 'react'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
@@ -7,8 +8,15 @@ interface DohaSkeletonProps {
 }
 
 const DohaSkeleton: React.FC<DohaSkeletonProps> = ({details = false}) => {
+  const cardClasses = classNames(
+    'bg-white shadow-xl rounded-lg p-6 w-full mb-8',
+    {
+      'max-w-2xl': details,
+      'max-w-sm mx-auto': !details,
+    }
+  )
   return (
-    <div className='bg-white shadow-xl rounded-lg p-8 max-w-2xl w-full mb-8'>
+    <div className={cardClasses}>
       {details ? (
         <>
           <div className='flex justify-between items-start'>

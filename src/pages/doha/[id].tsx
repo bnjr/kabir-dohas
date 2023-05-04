@@ -13,9 +13,9 @@ const DohaPage: React.FC<DohaPageProps> = ({dohaData}) => {
   return (
     <>
       <SEOHead
-        title={`Kabir's Doha: ${dohaData.Doha}`}
-        description={`Read and understand Kabir's Doha: "${dohaData.EN}".`}
-        url={`${process.env.NEXT_PUBLIC_BASE_URL}/doha/${dohaData.ID}`}
+        title={`Kabir's Doha: ${dohaData.doha_hi}`}
+        description={`Read and understand Kabir's Doha: "${dohaData.doha_en}".`}
+        url={`${process.env.NEXT_PUBLIC_BASE_URL}/doha/${dohaData.id}`}
       />
       {dohaData && <Doha dohaData={dohaData} loading={false} details/>}
       <DohaPageButtons />

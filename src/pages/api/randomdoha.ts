@@ -1,5 +1,6 @@
 import {NextApiRequest, NextApiResponse} from 'next'
 import Airtable from 'airtable'
+import {DohaData} from '@/types/types'
 
 const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY
 const AIRTABLE_BASE_ID = process.env.AIRTABLE_BASE_ID ?? ''
@@ -15,15 +16,15 @@ const getTotalRecords = async () => {
     .select({
       maxRecords: 1,
       view: 'Grid view',
-      fields: ['ID'],
-      sort: [{field: 'ID', direction: 'desc'}],
+      fields: ['id'],
+      sort: [{field: 'id', direction: 'desc'}],
     })
     .all()
 
-  return (records[0].fields['ID'] as number) ?? 0
+  return (records[0].fields['id'] as number) ?? 0
 }
 
-const getRandomDoha = async () => {
+const getRandomDoha = async (): Promise<DohaData> => {
   if (totalRecords === null) {
     totalRecords = await getTotalRecords()
   }
@@ -33,17 +34,16 @@ const getRandomDoha = async () => {
     randomOffset = Math.floor(Math.random() * (totalRecords - 1)) + 1
   } while (randomOffset === lastRandomOffset)
   lastRandomOffset = randomOffset
-
   const records = await base(AIRTABLE_TABLE_NAME)
     .select({
       maxRecords: 1,
       view: 'Grid view',
-      fields: ['ID', 'Doha', 'EN', 'Meaning'],
-      filterByFormula: `{ID} = ${randomOffset}`,
+      fields: ['id', 'doha_hi', 'doha_en', 'meaning_en'],
+      filterByFormula: `{id} = ${randomOffset}`,
     })
     .all()
 
-  return records[0].fields
+  return records[0].fields as unknown as DohaData
 }
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {

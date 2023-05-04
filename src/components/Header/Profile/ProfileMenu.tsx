@@ -1,6 +1,7 @@
 import React, {useRef, useState} from 'react'
 import {useAuth} from '@/context/AuthContext'
 import Link from 'next/link'
+import Image from 'next/image'
 import useOutsideClick from '@/hooks/useOutsideClick'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faUserCircle} from '@fortawesome/free-solid-svg-icons'
@@ -26,7 +27,7 @@ const ProfileMenu: React.FC = () => {
         className='text-white hover:text-indigo-300'
       >
         {user && user.photoURL ? (
-          <img
+          <Image
             src={user.photoURL}
             alt='Profile'
             className='w-8 h-8 rounded-full border-2 border-indigo-300'
