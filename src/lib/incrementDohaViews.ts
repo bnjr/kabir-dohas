@@ -17,7 +17,7 @@ export async function incrementDohaViews(dohaId: string) {
   }
 
   try {
-    const response = await fetch('/api/doha/incrementiews', {
+    const response = await fetch('/api/doha/incrementviews', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
