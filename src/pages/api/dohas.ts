@@ -7,7 +7,42 @@ const AIRTABLE_TABLE_NAME = 'Dohas'
 
 const base = new Airtable({apiKey: AIRTABLE_API_KEY}).base(AIRTABLE_BASE_ID)
 
-const getPaginatedDohas = async (page: number, limit: number) => {
+const getAllDohas = async (): Promise<any[]> => {
+  return new Promise((resolve, reject) => {
+    const dohas: any[] = []
+
+    base(AIRTABLE_TABLE_NAME)
+      .select({
+        view: 'Grid view',
+        fields: ['doha_hi'],
+        // fields: ['doha_en'],
+        // fields: ['meaning_en'],
+        // fields: ['doha_hi', 'doha_en', 'meaning_en'],
+        sort: [{field: 'id', direction: 'asc'}],
+      })
+      .eachPage(
+        (records, fetchNextPage) => {
+          records.forEach((record) => {
+            dohas.push(record.fields)
+          })
+
+          fetchNextPage()
+        },
+        (error) => {
+          if (error) {
+            reject(error)
+          } else {
+            resolve(dohas)
+          }
+        }
+      )
+  })
+}
+
+const getPaginatedDohas = async (
+  page: number,
+  limit: number
+): Promise<any[]> => {
   return new Promise((resolve, reject) => {
     const dohas: any[] = []
     let pageCount = 0
@@ -16,8 +51,8 @@ const getPaginatedDohas = async (page: number, limit: number) => {
       .select({
         pageSize: limit,
         view: 'Grid view',
-        fields: ['ID', 'Doha', 'EN', 'Meaning'],
-        sort: [{field: 'ID', direction: 'asc'}],
+        fields: ['id', 'doha_hi', 'doha_en', 'meaning_en'],
+        sort: [{field: 'id', direction: 'asc'}],
       })
       .eachPage(
         (records, fetchNextPage) => {
@@ -45,7 +80,17 @@ const getPaginatedDohas = async (page: number, limit: number) => {
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const {query} = req
-  const {page, limit} = query
+  const {page, limit, all} = query
+
+  if (all === 'true') {
+    try {
+      const alldohas = await getAllDohas()
+      res.status(200).json({alldohas})
+    } catch (error) {
+      res.status(500).json({error: 'Failed to fetch all dohas'})
+    }
+    return
+  }
 
   const pageNum = parseInt(page as string) || 1
   const itemsPerPage = parseInt(limit as string) || 10

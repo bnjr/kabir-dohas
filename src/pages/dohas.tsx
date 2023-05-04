@@ -59,7 +59,7 @@ const DohasPage = () => {
       <div className='mt-8'>
         {loading && initialLoad ? skeletons : null}
         {dohas.map((doha) => (
-          <Doha key={doha.ID} dohaData={doha} loading={false} />
+          <Doha key={doha.id} dohaData={doha} loading={false} />
         ))}
         {loading && !initialLoad ? skeletons : null}
       </div>

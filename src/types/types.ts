@@ -1,8 +1,8 @@
 export interface DohaData {
-  ID: string
-  Doha: string
-  EN: string
-  Meaning: string
+  id: string
+  doha_hi: string
+  doha_en: string
+  meaning_en: string
 }
 
 export interface Favorite {

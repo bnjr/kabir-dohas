@@ -7,7 +7,7 @@ interface FetchDohasOptions {
 }
 
 const useFetchDohas = () => {
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   const fetchDohas = async (options: FetchDohasOptions = {}) => {
@@ -58,7 +58,61 @@ const useFetchDohas = () => {
     }
   }
 
-  return {loading, error, fetchDohas, fetchDoha, fetchRandomDoha}
+  const fetchAllDohas = async () => {
+    setLoading(true)
+    setError(null)
+
+    try {
+      const response = await fetch('/api/dohas?all=true')
+      const dohas: DohaData[] = await response.json()
+      return dohas
+    } catch (error) {
+      setError((error as Error).message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const fetchDohasFromFinder = async (
+    userPrompt: string
+  ): Promise<{synopsis: string; dohas: DohaData[]}> => {
+    setLoading(true)
+    try {
+      const response = await fetch('/api/dohafinder', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({userPrompt}),
+      })
+      const data = await response.json()
+
+      const dohasPromises = data.sourceDocuments.map(async (doc: any) => {
+        const dohaResponse = await fetch(`/api/doha/${doc.metadata.line}`)
+        const dohaData = await dohaResponse.json()
+        return dohaData
+      })
+
+      const dohas = await Promise.all(dohasPromises)
+
+      setLoading(false)
+      return {synopsis: (data.text as string).trim(), dohas}
+    } catch (err) {
+      setLoading(false)
+      setError('Failed to fetch dohas from finder' + (err as Error).message)
+      return {synopsis: '', dohas: []}
+    }
+  }
+
+  return {
+    loading,
+    error,
+    fetchDohas,
+    fetchDoha,
+    fetchRandomDoha,
+    fetchAllDohas,
+    fetchDohasFromFinder,
+  }
 }
 
 export default useFetchDohas

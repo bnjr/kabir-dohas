@@ -5,6 +5,7 @@ import Link from 'next/link'
 import DohaActions from './Actions/DohaActions'
 import {useEffect} from 'react'
 import {incrementDohaViews} from '@/lib/incrementDohaViews'
+import classNames from 'classnames'
 
 interface DohaProps {
   dohaData: DohaData | null
@@ -20,8 +21,7 @@ const DohaComponent: React.FC<DohaProps> = ({
   useEffect(() => {
     const addView = async () => {
       if (!loading && dohaData) {
-        await incrementDohaViews(dohaData.ID)
-        console.log('Incrementing in Doha for: ', dohaData.ID)
+        await incrementDohaViews(dohaData.id)
       }
     }
     addView()
@@ -30,9 +30,16 @@ const DohaComponent: React.FC<DohaProps> = ({
   if (loading) {
     return <DohaSkeleton details />
   }
-
+  
+  const cardClasses = classNames(
+    'bg-white shadow-xl rounded-lg p-6 w-full mb-8',
+    {
+      'max-w-2xl': details,
+      'max-w-sm mx-auto': !details,
+    }
+  )
   return dohaData ? (
-    <div className='bg-white shadow-xl rounded-lg p-6 max-w-2xl w-full mb-8'>
+    <div className={cardClasses}>
       <div className='flex justify-between items-start'>
         {details ? (
           <>
@@ -41,9 +48,9 @@ const DohaComponent: React.FC<DohaProps> = ({
             </h1>
           </>
         ) : (
-          <Link key={dohaData.ID} href={`/doha/${dohaData.ID}`}>
+          <Link key={dohaData.id} href={`/doha/${dohaData.id}`}>
             <div className='text-lg sm:text-xl font-semibold text-indigo-800 whitespace-pre-wrap'>
-              {dohaData.Doha}
+              {dohaData.doha_hi}
             </div>
           </Link>
         )}
@@ -52,17 +59,17 @@ const DohaComponent: React.FC<DohaProps> = ({
         <>
           <div className='border-t border-b border-indigo-300 py-4 mb-4'>
             <p className='text-lg sm:text-xl font-semibold text-indigo-800 whitespace-pre-wrap'>
-              {dohaData.Doha}
+              {dohaData.doha_hi}
             </p>
           </div>
           <h2 className='text-lg font-semibold mb-2 text-indigo-700'>
             Translation
           </h2>
-          <p className='mb-4 text-gray-800'>{dohaData.EN}</p>
+          <p className='mb-4 text-gray-800'>{dohaData.doha_en}</p>
           <h2 className='text-lg font-semibold mb-2 text-indigo-700'>
             Meaning
           </h2>
-          <p className='text-gray-800'>{dohaData.Meaning}</p>
+          <p className='text-gray-800'>{dohaData.meaning_en}</p>
         </>
       )}
       <DohaActions dohaData={dohaData} />
