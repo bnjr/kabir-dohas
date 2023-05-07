@@ -1,90 +1,52 @@
-import {NextApiRequest, NextApiResponse} from 'next'
 import {OpenAI} from 'langchain/llms/openai'
 import {RetrievalQAChain} from 'langchain/chains'
-import {JSONLoader} from 'langchain/document_loaders/fs/json'
-import {HNSWLib} from 'langchain/vectorstores/hnswlib'
-import {OpenAIEmbeddings} from 'langchain/embeddings/openai'
 import {VectorStore} from 'langchain/dist/vectorstores/base'
-import Airtable from 'airtable'
+import {
+  createVectorStore,
+  getAllEmbeddingsFromKVHash,
+  loadDocumentsFromRedis,
+} from '@/lib/manageDohaObjects'
+import {NextApiRequest, NextApiResponse} from 'next'
 
-const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY
-const AIRTABLE_BASE_ID = process.env.AIRTABLE_BASE_ID ?? ''
-const AIRTABLE_TABLE_NAME = 'Dohas'
-const base = new Airtable({apiKey: AIRTABLE_API_KEY}).base(AIRTABLE_BASE_ID)
-
-const fetchAllDohas = async (): Promise<Blob> => {
-  return new Promise((resolve, reject) => {
-    const dohas: any[] = []
-
-    base(AIRTABLE_TABLE_NAME)
-      .select({
-        view: 'Grid view',
-        fields: ['doha_hi'],
-        // fields: ['doha_en'],
-        // fields: ['meaning_en'],
-        // fields: ['doha_hi', 'doha_en', 'meaning_en'],
-        sort: [{field: 'id', direction: 'asc'}],
-      })
-      .eachPage(
-        (records, fetchNextPage) => {
-          records.forEach((record) => {
-            dohas.push(record.fields)
-          })
-
-          fetchNextPage()
-        },
-        (error) => {
-          if (error) {
-            reject(error)
-          } else {
-            const jsonString = JSON.stringify(dohas)
-            resolve(new Blob([jsonString], {type: 'application/json'}))
-          }
-        }
-      )
-  })
-}
-
-const createVectorStore = async (): Promise<VectorStore> => {
-  const dohasBlob = await fetchAllDohas()
-  const loader = new JSONLoader(dohasBlob)
-  const docs = await loader.load()
-
-  // Load the docs into the vector store
-  const vectorStore = await HNSWLib.fromDocuments(docs, new OpenAIEmbeddings())
-
-  return vectorStore
-}
-
-const getDohaRetrievalChain = async (): Promise<RetrievalQAChain> => {
-  const vectorStore = await createVectorStore()
-
-  const chain = RetrievalQAChain.fromLLM(
-    new OpenAI(),
-    vectorStore.asRetriever(),
-    {returnSourceDocuments: true}
-  )
-  return chain
-}
-
-const initializeChain = async () => {
-  if (!chain) {
-    chain = await getDohaRetrievalChain()
+const getVectorStore = async (): Promise<VectorStore> => {
+  try {
+    const docs = await loadDocumentsFromRedis()
+    if (docs) {
+      const embeddings = await getAllEmbeddingsFromKVHash()
+      const vectorStore = await createVectorStore(docs, embeddings)
+      return vectorStore
+    } else {
+      console.error('Error getting docs')
+      throw Error('Error getting docs')
+    }
+  } catch (error) {
+    console.error('Error getting VectorStore: ', (error as Error).message)
+    throw Error('Error getting VectorStore')
   }
 }
 
-let chain: RetrievalQAChain | null = null
+const getDohaRetrievalChain = async (): Promise<RetrievalQAChain> => {
+  try {
+    const vectorStore = await getVectorStore()
 
-initializeChain()
+    const chain = RetrievalQAChain.fromLLM(
+      new OpenAI(),
+      vectorStore.asRetriever(),
+      {returnSourceDocuments: true}
+    )
+    return chain
+  } catch (error) {
+    console.error('Error in creating chain:', (error as Error).message)
+    throw error
+  }
+}
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'POST') {
     const {userPrompt} = req.body
 
     try {
-      if (!chain) {
-        await initializeChain()
-      }
+      const chain = await getDohaRetrievalChain()
 
       const response = await chain?.call({
         query: userPrompt,
@@ -92,6 +54,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
       res.status(200).json(response)
     } catch (error) {
+      console.error('Error in finding doha:', (error as Error).message)
       res.status(500).json({error: (error as Error).message})
     }
   } else {
