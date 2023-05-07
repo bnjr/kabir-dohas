@@ -31,7 +31,15 @@ const fetchAllDohas = async (): Promise<Blob> => {
       .eachPage(
         (records, fetchNextPage) => {
           records.forEach((record) => {
-            dohas.push(record.fields)
+            if (record.fields) {
+              const content = {
+                doha_hi: (record.fields['doha_hi'] as string).replace(
+                  '\n',
+                  ' '
+                ),
+              }
+              dohas.push(record.fields)
+            }
           })
 
           fetchNextPage()
@@ -156,13 +164,12 @@ export const createVectorStore = async (
   const args: HNSWLibArgs = {
     space: 'cosine',
     numDimensions: precomputedEmbeddings[0]?.vector.length,
-    docstore: undefined
+    docstore: undefined,
   }
 
   const hnswlib = new HNSWLib(new OpenAIEmbeddings(), args)
 
   for (const doc of documents) {
-
     const precomputedEmbedding =
       precomputedEmbeddings[doc.metadata['line'] as number]
 
