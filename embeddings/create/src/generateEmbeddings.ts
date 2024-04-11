@@ -1,8 +1,8 @@
 // import { pipeline } from '@xenova/transformers'
 import { createClient } from '@supabase/supabase-js'
 import { CsvRow } from './read-CSV'
-import * as dotenv from 'dotenv'
-dotenv.config()
+// import * as dotenv from 'dotenv'
+// dotenv.config()
 
 const supabaseUrl = process.env.SUPABASE_URL!;
 const supabaseKey = process.env.SUPABASE_ANON_KEY!;

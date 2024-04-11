@@ -1,7 +1,7 @@
 // embeddings-search/src/embeddings.ts
 import { createClient } from '@supabase/supabase-js'
-import * as dotenv from 'dotenv'
-dotenv.config()
+// import * as dotenv from 'dotenv'
+// dotenv.config()
 
 const supabaseUrl = process.env.SUPABASE_URL
 const supabaseKey = process.env.SUPABASE_ANON_KEY
@@ -35,7 +35,7 @@ async function generateEmbeddings(search: string): Promise<number[]> {
     })
 
     const embedding = Array.from(output.data)
-    return embedding
+    return embedding as number[]
   } catch (error) {
     console.error('Error generating embeddings:', error)
     throw error
