@@ -1,49 +1,21 @@
-import {NextApiRequest, NextApiResponse} from 'next'
-import Airtable from 'airtable'
-import {DohaData} from '@/types/types'
+import { NextApiRequest, NextApiResponse } from 'next'
+import { createClient } from '@supabase/supabase-js'
+import { DohaData } from '@/types/types'
 
-const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY
-const AIRTABLE_BASE_ID = process.env.AIRTABLE_BASE_ID ?? ''
-const AIRTABLE_TABLE_NAME = 'Dohas'
+const supabaseUrl = process.env.SUPABASE_URL!
+const supabaseKey = process.env.SUPABASE_ANON_KEY!
 
-const base = new Airtable({apiKey: AIRTABLE_API_KEY}).base(AIRTABLE_BASE_ID)
+const supabase = createClient(supabaseUrl, supabaseKey)
 
-let lastRandomOffset: number | null = null
-let totalRecords: number | null = null
+const getRandomDoha = async (): Promise<DohaData | null> => {
+  const { data, error } = await supabase
+    .from('dohas')
+    .select('*')
+    .order('random()')
+    .limit(1)
 
-const getTotalRecords = async () => {
-  const records = await base(AIRTABLE_TABLE_NAME)
-    .select({
-      maxRecords: 1,
-      view: 'Grid view',
-      fields: ['id'],
-      sort: [{field: 'id', direction: 'desc'}],
-    })
-    .all()
-
-  return (records[0].fields['id'] as number) ?? 0
-}
-
-const getRandomDoha = async (): Promise<DohaData> => {
-  if (totalRecords === null) {
-    totalRecords = await getTotalRecords()
-  }
-
-  let randomOffset
-  do {
-    randomOffset = Math.floor(Math.random() * (totalRecords - 1)) + 1
-  } while (randomOffset === lastRandomOffset)
-  lastRandomOffset = randomOffset
-  const records = await base(AIRTABLE_TABLE_NAME)
-    .select({
-      maxRecords: 1,
-      view: 'Grid view',
-      fields: ['id', 'doha_hi', 'doha_en', 'meaning_en'],
-      filterByFormula: `{id} = ${randomOffset}`,
-    })
-    .all()
-
-  return records[0].fields as unknown as DohaData
+  if (!error && data) return data[0].fields as unknown as DohaData
+  else return null
 }
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
@@ -52,9 +24,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       const doha = await getRandomDoha()
       res.status(200).json(doha)
     } catch (error) {
-      res.status(500).json({error: 'Failed to fetch doha'})
+      res.status(500).json({ error: 'Failed to fetch doha' })
     }
   } else {
-    res.status(405).json({error: 'Method not allowed'})
+    res.status(405).json({ error: 'Method not allowed' })
   }
 }
