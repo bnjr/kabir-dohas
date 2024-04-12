@@ -9,11 +9,14 @@ const supabaseKey = process.env.SUPABASE_ANON_KEY!
 const supabase = createClient<Database>(supabaseUrl, supabaseKey)
 
 const getDohaById = async (id: string): Promise<DohaData | null> => {
+  console.log('getDohaById: ', {id})
   let { data: doha, error } = await supabase
     .from('dohas')
     .select('id, doha_hi, doha_en, meaning_en')
     .eq('id', id)
     .single()
+
+    console.log('getDohaById select: ', {doha, error})
 
   if (error) {
     console.error('Error fetching doha: ', error)
