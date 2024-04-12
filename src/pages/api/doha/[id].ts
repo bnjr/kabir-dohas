@@ -1,37 +1,41 @@
 // /api/doha/[id].ts
-import {NextApiRequest, NextApiResponse} from 'next'
-import Airtable from 'airtable'
+import { NextApiRequest, NextApiResponse } from 'next'
+import { createClient } from '@supabase/supabase-js'
+import { Database, DohaData } from '@/types'
 
-const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY
-const AIRTABLE_BASE_ID = process.env.AIRTABLE_BASE_ID ?? ''
-const AIRTABLE_TABLE_NAME = 'Dohas'
+const supabaseUrl = process.env.SUPABASE_URL!
+const supabaseKey = process.env.SUPABASE_ANON_KEY!
 
-const base = new Airtable({apiKey: AIRTABLE_API_KEY}).base(AIRTABLE_BASE_ID)
+const supabase = createClient<Database>(supabaseUrl, supabaseKey)
 
-const getDohaById = async (id: string) => {
-  const records = await base(AIRTABLE_TABLE_NAME)
-    .select({
-      maxRecords: 1,
-      view: 'Grid view',
-      fields: ['id', 'doha_hi', 'doha_en', 'meaning_en'],
-      filterByFormula: `{id} = ${id}`,
-    })
-    .all()
+const getDohaById = async (id: string): Promise<DohaData | null> => {
+  console.log('getDohaById: ', {id})
+  let { data: doha, error } = await supabase
+    .from('dohas')
+    .select('id, doha_hi, doha_en, meaning_en')
+    .eq('id', id)
+    .single()
 
-  return records[0].fields
+    console.log('getDohaById select: ', {doha, error})
+
+  if (error) {
+    console.error('Error fetching doha: ', error)
+    return null
+  }
+
+  return (doha as unknown as DohaData) || null
 }
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const {id} = req.query
-
+  const { id } = req.query
   if (req.method === 'GET') {
     try {
       const doha = await getDohaById(id as string)
       res.status(200).json(doha)
     } catch (error) {
-      res.status(500).json({error: 'Failed to fetch doha'})
+      res.status(500).json({ error: 'Failed to fetch doha' })
     }
   } else {
-    res.status(405).json({error: 'Method not allowed'})
+    res.status(405).json({ error: 'Method not allowed' })
   }
 }
