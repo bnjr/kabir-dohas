@@ -1,10 +1,11 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { createClient } from '@supabase/supabase-js'
+import { Database } from '@/types'
 
 const supabaseUrl = process.env.SUPABASE_URL!
 const supabaseKey = process.env.SUPABASE_ANON_KEY!
 
-const supabase = createClient(supabaseUrl, supabaseKey)
+const supabase = createClient<Database>(supabaseUrl, supabaseKey)
 
 const getAllDohas = async (): Promise<any[] | null> => {
   const { data: dohas, error } = await supabase.from('dohas').select('*')
@@ -20,7 +21,7 @@ const getPaginatedDohas = async (
 
   let { data: dohas, error } = await supabase
     .from('dohas')
-    .select('*')
+    .select('id, doha_hi, doha_en, meaning_en')
     .range(startIndex, endIndex)
 
   if (error) {

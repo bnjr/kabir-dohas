@@ -1,20 +1,19 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { createClient } from '@supabase/supabase-js'
-import { DohaData } from '@/types/types'
+import { DohaData, Database } from '@/types'
 
 const supabaseUrl = process.env.SUPABASE_URL!
 const supabaseKey = process.env.SUPABASE_ANON_KEY!
 
-const supabase = createClient(supabaseUrl, supabaseKey)
+const supabase = createClient<Database>(supabaseUrl, supabaseKey)
 
 const getRandomDoha = async (): Promise<DohaData | null> => {
   const { data, error } = await supabase
-    .from('dohas')
-    .select('*')
-    .order('random()')
-    .limit(1)
+    .from('random_doha')
+    .select('id, doha_hi, doha_en, meaning_en')
+    .single()
 
-  if (!error && data) return data[0].fields as unknown as DohaData
+  if (!error && data) return data as unknown as DohaData
   else return null
 }
 

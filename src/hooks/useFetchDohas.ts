@@ -1,5 +1,5 @@
-import {useState} from 'react'
-import {DohaData} from '@/types/types'
+import { useState } from 'react'
+import { DohaData } from '@/types/types'
 
 interface FetchDohasOptions {
   page?: number
@@ -75,7 +75,7 @@ const useFetchDohas = () => {
 
   const fetchDohasFromFinder = async (
     userPrompt: string
-  ): Promise<{synopsis: string; dohas: DohaData[]}> => {
+  ): Promise<{ synopsis: string; dohas: DohaData[] }> => {
     setLoading(true)
     try {
       const response = await fetch('/api/dohafinder', {
@@ -83,7 +83,7 @@ const useFetchDohas = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({userPrompt}),
+        body: JSON.stringify({ userPrompt }),
       })
       const data = await response.json()
 
@@ -96,11 +96,11 @@ const useFetchDohas = () => {
       const dohas = await Promise.all(dohasPromises)
 
       setLoading(false)
-      return {synopsis: (data.text as string).trim(), dohas}
+      return { synopsis: (data.text as string).trim(), dohas }
     } catch (err) {
       setLoading(false)
       setError('Failed to fetch dohas from finder' + (err as Error).message)
-      return {synopsis: '', dohas: []}
+      return { synopsis: '', dohas: [] }
     }
   }
 
