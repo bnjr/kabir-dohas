@@ -25,12 +25,12 @@ const DohaPage: React.FC<DohaPageProps> = ({ dohaData }) => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
-    console.log('get server page')
     const { id } = context.query
     const apiUrl = new URL(
       `/api/doha/${id}`,
       `http://${context.req.headers.host}`
     ).toString()
+    console.log('get server page', {apiUrl})
 
     const response = await fetch(apiUrl)
     if (!response.ok) {
