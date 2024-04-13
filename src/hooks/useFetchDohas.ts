@@ -8,6 +8,7 @@ interface FetchDohasOptions {
 
 const useFetchDohas = () => {
   const [loading, setLoading] = useState(false)
+  const [synopsis, setSynopsis] = useState('')
   const [error, setError] = useState<string | null>(null)
 
   const fetchDohas = async (options: FetchDohasOptions = {}) => {
@@ -73,10 +74,9 @@ const useFetchDohas = () => {
     }
   }
 
-  const fetchDohasFromFinder = async (
-    userPrompt: string
-  ): Promise<{ synopsis: string; dohas: DohaData[] }> => {
+  const fetchDohasFromFinder = async (userPrompt: string): Promise<void> => {
     setLoading(true)
+    setSynopsis('') // Clear the synopsis before making the request
     try {
       const response = await fetch('/api/dohafinder', {
         method: 'POST',
@@ -85,28 +85,32 @@ const useFetchDohas = () => {
         },
         body: JSON.stringify({ userPrompt }),
       })
-      const data = await response.json()
 
-      const dohasPromises = data.sourceDocuments.map(async (doc: any) => {
-        const dohaResponse = await fetch(`/api/doha/${doc.metadata.line}`)
-        const dohaData = await dohaResponse.json()
-        return dohaData
-      })
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
 
-      const dohas = await Promise.all(dohasPromises)
-
-      setLoading(false)
-      return { synopsis: (data.text as string).trim(), dohas }
+      const reader = response.body?.getReader()
+      if (reader) {
+        const decoder = new TextDecoder('utf-8')
+        while (true) {
+          const { done, value } = await reader.read()
+          if (done) break
+          const chunk = decoder.decode(value)
+          setSynopsis((prevSynopsis) => prevSynopsis + chunk) // Update the synopsis state
+          setLoading(false)
+        }
+      }
     } catch (err) {
       setLoading(false)
       setError('Failed to fetch dohas from finder' + (err as Error).message)
-      return { synopsis: '', dohas: [] }
     }
   }
 
   return {
     loading,
     error,
+    synopsis,
     fetchDohas,
     fetchDoha,
     fetchRandomDoha,

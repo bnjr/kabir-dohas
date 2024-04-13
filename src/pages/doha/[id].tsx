@@ -29,11 +29,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       `/api/doha/${id}`,
       `http://${context.req.headers.host}`
     ).toString()
-    console.log('get server page', { apiUrl })
 
     const response = await fetch(apiUrl)
-
-    console.log('getServerSideProps', { response })
 
     if (!response.ok) {
       throw new Error('Doha not found')
