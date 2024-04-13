@@ -1,11 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { createClient } from '@supabase/supabase-js'
-import { DohaData, Database } from '@/types'
-
-const supabaseUrl = process.env.SUPABASE_URL!
-const supabaseKey = process.env.SUPABASE_ANON_KEY!
-
-const supabase = createClient<Database>(supabaseUrl, supabaseKey)
+import { DohaData } from '@/types'
+import { supabase } from '@/lib'
 
 const getRandomDoha = async (): Promise<DohaData | null> => {
   const { data, error } = await supabase

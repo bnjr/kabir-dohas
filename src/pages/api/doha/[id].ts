@@ -1,22 +1,14 @@
 // /api/doha/[id].ts
 import { NextApiRequest, NextApiResponse } from 'next'
-import { createClient } from '@supabase/supabase-js'
-import { Database, DohaData } from '@/types'
-
-const supabaseUrl = process.env.SUPABASE_URL!
-const supabaseKey = process.env.SUPABASE_ANON_KEY!
-
-const supabase = createClient<Database>(supabaseUrl, supabaseKey)
+import { DohaData } from '@/types'
+import { supabase } from '@/lib'
 
 const getDohaById = async (id: string): Promise<DohaData | null> => {
-  console.log('getDohaById: ', {id})
-  let { data: doha, error } = await supabase
+  const { data: doha, error } = await supabase
     .from('dohas')
     .select('id, doha_hi, doha_en, meaning_en')
     .eq('id', id)
     .single()
-
-    console.log('getDohaById select: ', {doha, error})
 
   if (error) {
     console.error('Error fetching doha: ', error)

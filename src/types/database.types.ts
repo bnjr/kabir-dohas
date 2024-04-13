@@ -33,6 +33,45 @@ export type Database = {
         }
         Relationships: []
       }
+      models: {
+        Row: {
+          active: boolean | null
+          model: Database["public"]["Enums"]["model"]
+        }
+        Insert: {
+          active?: boolean | null
+          model: Database["public"]["Enums"]["model"]
+        }
+        Update: {
+          active?: boolean | null
+          model?: Database["public"]["Enums"]["model"]
+        }
+        Relationships: []
+      }
+      prompts: {
+        Row: {
+          active: boolean | null
+          comment: string | null
+          created_at: string
+          id: number
+          prompt: string | null
+        }
+        Insert: {
+          active?: boolean | null
+          comment?: string | null
+          created_at?: string
+          id?: number
+          prompt?: string | null
+        }
+        Update: {
+          active?: boolean | null
+          comment?: string | null
+          created_at?: string
+          id?: number
+          prompt?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       random_doha: {
@@ -61,7 +100,12 @@ export type Database = {
       }
     }
     Enums: {
-      [_ in never]: never
+      model:
+        | "sonar-small-chat"
+        | "sonar-medium-chat"
+        | "codellama-70b-instruct"
+        | "mistral-7b-instruct"
+        | "mixtral-8x7b-instruct"
     }
     CompositeTypes: {
       [_ in never]: never

@@ -1,64 +1,47 @@
-import {OpenAI} from 'langchain/llms/openai'
-import {RetrievalQAChain} from 'langchain/chains'
-import {VectorStore} from 'langchain/dist/vectorstores/base'
-import {
-  createVectorStore,
-  getAllEmbeddingsFromKVHash,
-  loadDocumentsFromRedis,
-} from '@/lib/manageDohaObjects'
-import {NextApiRequest, NextApiResponse} from 'next'
-
-const getVectorStore = async (): Promise<VectorStore> => {
-  try {
-    const docs = await loadDocumentsFromRedis()
-    if (docs) {
-      const embeddings = await getAllEmbeddingsFromKVHash()
-      const vectorStore = await createVectorStore(docs, embeddings)
-      return vectorStore
-    } else {
-      console.error('Error getting docs')
-      throw Error('Error getting docs')
-    }
-  } catch (error) {
-    console.error('Error getting VectorStore: ', (error as Error).message)
-    throw Error('Error getting VectorStore')
-  }
-}
-
-const getDohaRetrievalChain = async (): Promise<RetrievalQAChain> => {
-  try {
-    const vectorStore = await getVectorStore()
-
-    const chain = RetrievalQAChain.fromLLM(
-      new OpenAI(),
-      vectorStore.asRetriever(),
-      {returnSourceDocuments: true}
-    )
-    return chain
-  } catch (error) {
-    console.error('Error in creating chain:', (error as Error).message)
-    throw error
-  }
-}
+import { NextApiRequest, NextApiResponse } from 'next'
+import { generateEmbeddings, llm, searchEmbeddings } from '@/lib'
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'POST') {
-    const {userPrompt} = req.body
+    const { userPrompt } = req.body
 
     try {
-      const chain = await getDohaRetrievalChain()
+      console.log('Generating embeddings for the search query...')
+      const searchEmbedding = await generateEmbeddings(userPrompt)
 
-      const response = await chain?.call({
-        query: userPrompt,
-      })
+      console.log('Searching for relevant dohas...')
+      const dohas = await searchEmbeddings(searchEmbedding)
 
-      res.status(200).json(response)
+      if (dohas && dohas.length > 0) {
+        console.log('Relevant dohas found.')
+        console.log('') // Add a blank line for readability
+
+        console.log('Generating response...')
+
+        res.writeHead(200, {
+          'Content-Type': 'text/plain',
+          'Transfer-Encoding': 'chunked',
+        })
+
+        // Call the llm function with the relevant dohas and user query
+        await llm(
+          dohas.map((doha) => `Doha number ${doha.id}: ${doha.doha_hi}`),
+          userPrompt,
+          res
+        )
+
+      } else {
+        console.log('No relevant dohas found.')
+        console.log('') // Add a blank line for readability
+        res.status(404).json({ error: 'No relevant dohas found' })
+      }
+
     } catch (error) {
       console.error('Error in finding doha:', (error as Error).message)
-      res.status(500).json({error: (error as Error).message})
+      res.status(500).json({ error: (error as Error).message })
     }
   } else {
-    res.status(405).json({error: 'Method not allowed'})
+    res.status(405).json({ error: 'Method not allowed' })
   }
 }
 
