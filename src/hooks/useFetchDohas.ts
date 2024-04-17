@@ -79,76 +79,29 @@ const useFetchDohas = () => {
     setLoading(true)
     setSynopsis('')
     try {
-      const response = await fetch(
-        `${supabaseInfo().SUPABASE_URL}/functions/v1/doha-query`,
-
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${supabaseInfo().SUPABASE_ANON_KEY}`,
-          },
-          body: JSON.stringify({ query }),
-        }
-      )
+      const response = await fetch('/api/doha-finder', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ query }),
+      })
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
 
       const reader = response.body?.getReader()
-      const decoder = new TextDecoder('utf-8')
-
-      let buffer = ''
-
-      const processStream = ({
-        done,
-        value,
-      }: ReadableStreamReadResult<Uint8Array>) => {
-        if (done) {
-          console.log('Stream complete')
-          return
-        }
-
-        // Decode the stream chunk to text
-        const chunk = decoder.decode(value, { stream: true })
-        buffer += chunk
-
-        // Process the buffer line by line
-        let lines = buffer.split('\n')
-        buffer = lines.pop() || '' // Keep the last incomplete line in the buffer
-
-        lines.forEach((line) => {
-          if (line.startsWith('data: ')) {
-            const data: ChatCompletionChunk = JSON.parse(
-              line.replace('data: ', '')
-            )
-            const delta = data.choices[0].delta.content
-            if (delta) {
-              // Update the UI with the new content
-              setSynopsis((prevSynopsis) => prevSynopsis + delta)
-              setLoading(false)
-            }
-          }
-        })
-
-        // Read the next chunk
-        reader
-          ?.read()
-          .then(processStream)
-          .catch((readError) => {
-            console.error('Error reading the stream:', readError)
-            setLoading(false)
-          })
-      }
-
-      reader
-        ?.read()
-        .then(processStream)
-        .catch((readError) => {
-          console.error('Error reading the stream:', readError)
+      if (reader) {
+        const decoder = new TextDecoder('utf-8')
+        while (true) {
+          const { done, value } = await reader.read()
+          if (done) break
+          const chunk = decoder.decode(value)
+          setSynopsis((prevSynopsis) => prevSynopsis + chunk) // Update the synopsis state
           setLoading(false)
-        })
+        }
+      }
     } catch (err) {
       setLoading(false)
       setError('Failed to fetch dohas from finder' + (err as Error).message)
