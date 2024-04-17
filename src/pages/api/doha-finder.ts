@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { supabaseInfo } from '@/lib/supabaseClient'
+import { supabaseInfo } from '@/lib'
 import { ChatCompletionChunk } from 'openai/resources'
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {

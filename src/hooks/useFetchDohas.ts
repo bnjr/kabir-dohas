@@ -1,7 +1,5 @@
 import { useState } from 'react'
 import { DohaData } from '@/types/types'
-import { supabaseInfo } from '@/lib/supabaseClient'
-import { type ChatCompletionChunk } from 'openai/resources'
 interface FetchDohasOptions {
   page?: number
   itemsPerPage?: number
