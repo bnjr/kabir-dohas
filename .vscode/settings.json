@@ -1,7 +1,7 @@
 {
-    "editor.tabCompletion": "on",
-    "diffEditor.codeLens": true,
-    "python.analysis.extraPaths": [
-        "./db"
-    ]
+  "editor.tabCompletion": "on",
+  "diffEditor.codeLens": true,
+  "python.analysis.extraPaths": ["./db"],
+  "deno.enablePaths": ["./supabase/functions"],
+  "deno.importMap": "./supabase/functions/import_map.json"
 }

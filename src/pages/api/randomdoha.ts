@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { DohaData } from '@/types'
-import { supabase } from '@/lib'
+import { createClient } from '@/lib'
 
-const getRandomDoha = async (): Promise<DohaData | null> => {
+const getRandomDoha = async (supabase: any): Promise<DohaData | null> => {
   const { data, error } = await supabase
     .from('random_doha')
     .select('id, doha_hi, doha_en, meaning_en')
@@ -13,9 +13,11 @@ const getRandomDoha = async (): Promise<DohaData | null> => {
 }
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
+  const supabase = createClient(req, res)
+
   if (req.method === 'GET') {
     try {
-      const doha = await getRandomDoha()
+      const doha = await getRandomDoha(supabase)
       res.status(200).json(doha)
     } catch (error) {
       res.status(500).json({ error: 'Failed to fetch doha' })
