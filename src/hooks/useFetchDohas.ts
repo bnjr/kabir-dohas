@@ -123,7 +123,6 @@ const useFetchDohas = () => {
             const data: ChatCompletionChunk = JSON.parse(
               line.replace('data: ', '')
             )
-            console.log(data)
             const delta = data.choices[0].delta.content
             if (delta) {
               // Update the UI with the new content

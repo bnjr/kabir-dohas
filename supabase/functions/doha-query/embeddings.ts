@@ -19,8 +19,6 @@ async function generateEmbeddings(search: string): Promise<number[]> {
       normalize: true,
     });
 
-    // console.log('generateEmbeddings: output', output)
-
     console.log('generateEmbeddings, finish')
 
     // const embedding = Array.from(output.data)
