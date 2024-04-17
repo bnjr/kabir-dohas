@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { supabaseInfo } from '@/lib'
-import { ChatCompletionChunk } from 'openai/resources'
+import { type ChatCompletionChunk } from 'openai/resources'
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'POST') {
@@ -22,7 +22,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
-
+      
+      res.setHeader('Content-Type', 'text/plain');
+      res.setHeader('Transfer-Encoding', 'chunked');
+      
       const reader = response.body?.getReader()
       const decoder = new TextDecoder('utf-8')
 
