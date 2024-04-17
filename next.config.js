@@ -9,14 +9,17 @@ const nextConfig = {
       },
     ],
   },
+  eslint: {
+    dirs: ['src'], // Only run ESLint on the 'pages' and 'utils' directories during production builds (next build)
+  },
   async rewrites() {
     return [
       {
         source: '/sitemap.xml',
         destination: '/api/sitemap.xml',
       },
-    ];
+    ]
   },
-};
+}
 
-module.exports = nextConfig;
+module.exports = nextConfig
