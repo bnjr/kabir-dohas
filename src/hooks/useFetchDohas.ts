@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { DohaData } from '@/types/types'
-
 interface FetchDohasOptions {
   page?: number
   itemsPerPage?: number
@@ -74,16 +73,19 @@ const useFetchDohas = () => {
     }
   }
 
-  const fetchDohasFromFinder = async (userPrompt: string): Promise<void> => {
+  const fetchDohasFromFinder = async (query: string): Promise<void> => {
     setLoading(true)
     setSynopsis('') // Clear the synopsis before making the request
     try {
-      const response = await fetch('/api/dohafinder', {
-        method: 'POST',
+      // Adjust the URL to include the query as a URL search parameter
+      const url = new URL('/api/doha-query', window.location.href)
+      url.searchParams.append('query', query)
+
+      const response = await fetch(url.toString(), {
+        method: 'GET', // Changed to GET
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ userPrompt }),
       })
 
       if (!response.ok) {
@@ -93,17 +95,28 @@ const useFetchDohas = () => {
       const reader = response.body?.getReader()
       if (reader) {
         const decoder = new TextDecoder('utf-8')
-        while (true) {
-          const { done, value } = await reader.read()
-          if (done) break
-          const chunk = decoder.decode(value)
-          setSynopsis((prevSynopsis) => prevSynopsis + chunk) // Update the synopsis state
-          setLoading(false)
+        try {
+          while (true) {
+            const { done, value } = await reader.read()
+            if (done) {
+              break
+            }
+            const chunk = decoder.decode(value)
+            setSynopsis((prevSynopsis) => prevSynopsis + chunk) // Update the synopsis state
+            setLoading(false) // Moved inside the if(reader) block to ensure it's set after processing
+          }
+        } finally {
+          reader.releaseLock()
         }
+      } else {
+        console.error('Response body is null')
+        setError('No response body available')
       }
     } catch (err) {
-      setLoading(false)
+      console.error('Failed to fetch dohas from finder:', err)
       setError('Failed to fetch dohas from finder' + (err as Error).message)
+    } finally {
+      // Consider moving setLoading(false) inside the reader processing block if you want to wait until streaming is complete
     }
   }
 

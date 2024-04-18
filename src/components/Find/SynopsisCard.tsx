@@ -6,7 +6,6 @@ interface SynopsisProps {
 }
 
 const SynopsisCard: React.FC<SynopsisProps> = ({ synopsis }) => {
-  console.log({ synopsis })
   return (
     <div className="bg-white shadow-md rounded-lg p-6 mx-auto mb-4 w-full">
       <h2 className="text-xl text-indigo-700 font-bold mb-2">

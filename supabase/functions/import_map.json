@@ -1,0 +1,9 @@
+{
+  "imports": {
+    "commmon-tags": "https://esm.sh/common-tags@1.8.2",
+    "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@2",
+    "std/": "https://deno.land/std/",
+    "openai": "https://deno.land/x/openai@v4.33.1/mod.ts",
+    "transformers": "https://cdn.jsdelivr.net/npm/@xenova/transformers"
+  }
+}
