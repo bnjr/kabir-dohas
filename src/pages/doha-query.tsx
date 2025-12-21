@@ -12,6 +12,9 @@ const DohaQueryPage = () => {
   const router = useRouter()
 
   useEffect(() => {
+    // Create AbortController to cancel duplicate requests (React StrictMode fix)
+    const abortController = new AbortController()
+
     const fetchData = async () => {
       const queryParam = router.query.searchQuery
       if (queryParam) {
@@ -20,10 +23,15 @@ const DohaQueryPage = () => {
           ? queryParam[0]
           : queryParam
         setSearchInput(searchQuery)
-        await fetchDohasFromFinder(searchQuery)
+        await fetchDohasFromFinder(searchQuery, abortController.signal)
       }
     }
     fetchData()
+
+    // Cleanup: abort any in-flight request when effect re-runs or component unmounts
+    return () => {
+      abortController.abort()
+    }
   }, [router.query.searchQuery])
 
   const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

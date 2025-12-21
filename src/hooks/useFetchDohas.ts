@@ -73,7 +73,7 @@ const useFetchDohas = () => {
     }
   }
 
-  const fetchDohasFromFinder = async (query: string): Promise<void> => {
+  const fetchDohasFromFinder = async (query: string, signal?: AbortSignal): Promise<void> => {
     setLoading(true)
     setSynopsis('') // Clear the synopsis before making the request
     try {
@@ -86,6 +86,7 @@ const useFetchDohas = () => {
         headers: {
           'Content-Type': 'application/json',
         },
+        signal, // Pass the abort signal to fetch
       })
 
       if (!response.ok) {
@@ -97,6 +98,11 @@ const useFetchDohas = () => {
         const decoder = new TextDecoder('utf-8')
         try {
           while (true) {
+            // Check if aborted before reading
+            if (signal?.aborted) {
+              reader.cancel()
+              break
+            }
             const { done, value } = await reader.read()
             if (done) {
               break
@@ -113,6 +119,11 @@ const useFetchDohas = () => {
         setError('No response body available')
       }
     } catch (err) {
+      // Ignore abort errors - these are expected when cancelling duplicate requests
+      if ((err as Error).name === 'AbortError') {
+        console.log('Request was aborted')
+        return
+      }
       console.error('Failed to fetch dohas from finder:', err)
       setError('Failed to fetch dohas from finder' + (err as Error).message)
     } finally {

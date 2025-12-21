@@ -45,7 +45,8 @@ export async function GET(request: NextRequest) {
 
     // 4. Stream response from Groq
     const stream = await groq.chat.completions.create({
-      model: 'llama-3.1-8b-instant',
+      model: 'llama-3.3-70b-versatile',
+
       messages: [
         { role: 'system', content: systemPrompt },
         { role: 'user', content: userMessage },
