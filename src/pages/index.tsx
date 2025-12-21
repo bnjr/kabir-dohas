@@ -108,7 +108,7 @@ const Home = () => {
             />
           ))}
           {dohaData && <Doha dohaData={dohaData} loading={loading} details />}
-          <PageNavigation onReceiveDoha={handleGetRandomDoha} />
+          <PageNavigation onReceiveDoha={handleGetRandomDoha} showSearch={isRandomDohaView} />
         </>
       )}
     </>
