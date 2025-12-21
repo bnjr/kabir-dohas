@@ -45,22 +45,22 @@ const DohaQueryPage = () => {
         </div>
       ) : (
         <>
-          <div className="flex flex-col items-start mt-4 w-4/5 sm:w-2/3 lg:w-4/5 mx-auto">
-            <h1 className="text-2xl font-bold mb-4 text-indigo-200">
-              What does Kabir say about...
+          <div className="flex flex-col items-center mt-8 w-full max-w-2xl mx-auto">
+            <h1 className="text-3xl font-serif font-semibold mb-8 text-serene-text text-center tracking-tight">
+              Seeking wisdom on...
             </h1>
             <SearchBar
               searchInput={searchInput}
               handleSearchInputChange={handleSearchInputChange}
               handleAskKabir={handleAskKabir}
             />
-            <hr className="w-full mb-4 border-t border-gray-300" />
+            <hr className="w-full mt-10 mb-8 border-t border-serene-accent/10" />
           </div>
           {loading && (
-            <div className="flex justify-center items-center mt-4">
+            <div className="flex justify-center items-center mt-8">
               <Spinner />
-              <p className="text-xl font-semibold text-indigo-200 ml-4">
-                Searching...
+              <p className="text-lg font-sans text-serene-accent ml-4 animate-pulse">
+                Consulting the ancient verses...
               </p>
             </div>
           )}

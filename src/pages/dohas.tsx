@@ -60,7 +60,8 @@ const DohasPage = () => {
   return (
     <>
       <SEOHead title="All Dohas" description="Browse all of Kabir's Dohas." />
-      <div className="mt-8">
+      <div className="mt-8 px-4">
+        <h1 className="text-4xl font-serif font-bold text-serene-text mb-12 text-center">The Collection</h1>
         {loading && initialLoad ? skeletons : null}
         {dohas.map((doha) => (
           <Doha key={doha.id} dohaData={doha} loading={false} />

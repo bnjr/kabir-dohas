@@ -5,13 +5,13 @@ import BurgerMenu from './Burger/BurgerMenu'
 
 const Header = () => {
   return (
-    <header className='bg-indigo-700 text-white shadow-md mx-auto px-4 py-2 w-full max-w-2xl'>
+    <header className='bg-transparent py-6 w-full max-w-3xl mx-auto'>
       <div className='relative'>
-        <div className='flex justify-between items-center'>
+        <div className='flex justify-between items-center px-4'>
           <BurgerMenu />
-          <div className='text-2xl font-semibold'>
+          <div className='text-3xl font-serif font-bold tracking-tight text-serene-text'>
             <Link href='/'>
-              <div className='cursor-pointer'>{"Kabir's"} Dohas</div>
+              <div className='cursor-pointer'>Kabir</div>
             </Link>
           </div>
           <ProfileMenu />

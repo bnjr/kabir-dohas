@@ -1,22 +1,44 @@
 @import "tailwindcss";
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+@theme {
+  --color-serene-bg: #FDFCF0;
+  --color-serene-text: #2D2D2D;
+  --color-serene-accent: #4A5D3F;
+  --color-serene-accent-light: #6B7F5E;
+  --color-serene-muted: #7A8A75;
+  --color-serene-card: #FFFFFF;
+
+  --font-serif: "Cormorant Garamond", serif;
+  --font-sans: "Outfit", sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+:root {
+  /* Keep these for backwards compatibility if used in raw CSS, though @theme handles utilities */
+  --serene-bg: #FDFCF0;
+  --serene-text: #2D2D2D;
+  --serene-accent: #4A5D3F;
+  --serene-accent-light: #6B7F5E;
+  --serene-muted: #7A8A75;
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
+  color: var(--serene-text);
+  background-color: var(--serene-bg);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.serene-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(74, 93, 63, 0.15);
+  border-radius: 1.5rem;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08);
+}
+
+.serene-glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(8px);
+  border: 2px solid rgba(74, 93, 63, 0.25);
 }

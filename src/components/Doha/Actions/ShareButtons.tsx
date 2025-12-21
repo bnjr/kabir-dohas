@@ -1,13 +1,13 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import {
   FacebookShareButton,
   TwitterShareButton,
   WhatsappShareButton,
 } from 'react-share'
-import {FacebookIcon, TwitterIcon, WhatsappIcon} from 'react-share'
+import { FacebookIcon, TwitterIcon, WhatsappIcon } from 'react-share'
 import copy from 'copy-to-clipboard'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faCopy} from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCopy } from '@fortawesome/free-solid-svg-icons'
 
 interface ShareButtonsProps {
   url: string
@@ -34,7 +34,6 @@ const ShareButtons: React.FC<ShareButtonsProps> = ({
     <div className='flex'>
       <FacebookShareButton
         url={url}
-        quote={`${title} - ${description}`}
         className='mr-2'
       >
         <FacebookIcon size={32} round />
@@ -48,13 +47,13 @@ const ShareButtons: React.FC<ShareButtonsProps> = ({
       <div className='relative mr-2'>
         <button
           onClick={handleCopyLink}
-          className='focus:outline-none cursor-pointer bg-gray-500 text-white rounded-full border border-gray-300 p-1 w-8 h-8 flex items-center justify-center'
+          className='focus:outline-none cursor-pointer bg-serene-muted text-white rounded-full p-2 w-9 h-9 flex items-center justify-center hover:bg-serene-accent transition-colors duration-300 shadow-sm'
         >
-          <FontAwesomeIcon icon={faCopy} size='lg' />
+          <FontAwesomeIcon icon={faCopy} size='sm' />
         </button>
         {showCopiedMessage && (
-          <span className='text-sm text-white absolute top-full mt-1 px-2 py-1 bg-gray-400 border border-gray-950 rounded'>
-            Link Copied
+          <span className='absolute bottom-full mb-3 left-1/2 -translate-x-1/2 px-3 py-1.5 bg-serene-accent text-white text-[10px] uppercase tracking-widest font-semibold rounded-lg shadow-lg whitespace-nowrap animate-in fade-in zoom-in duration-300'>
+            Wisdom Shared
           </span>
         )}
       </div>

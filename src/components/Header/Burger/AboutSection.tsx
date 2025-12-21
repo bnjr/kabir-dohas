@@ -1,50 +1,43 @@
 const AboutSection: React.FC = () => {
   return (
-    <div className='bg-white shadow-xl rounded-lg p-8 max-w-2xl w-full'>
-      <h2 className='text-2xl font-semibold mb-4 text-indigo-700'>About</h2>
-      <p className='text-gray-800'>
-        This website is dedicated to sharing the wisdom of Kabir, a 15th-century
-        Indian mystic poet and saint. His poetry, known as Dohas, consists of
-        couplets that convey deep philosophical and spiritual messages. Our goal
-        is to help spread Kabir&apos;s teachings to a wider audience, making his
-        wisdom accessible to all.
-      </p>
-      <p className='text-gray-800 mt-4'>
-        The development of this website was made possible with the help of
-        ChatGPT, an AI language model by OpenAI. Utilizing the power of AI, we
-        were able to design, develop, and create a user-friendly platform that
-        showcases Kabir&apos;s Dohas. This collaboration highlights the potential of
-        AI in assisting with various aspects of web development, enabling us to
-        create a unique and engaging user experience.
-      </p>
-      <p className='text-gray-800 mt-4'>
-        The website&apos;s source code is open source, and we welcome contributions
-        from the community. You can view the repository, submit issues, and
-        contribute to the project on{' '}
-        <a
-          href='https://github.com/bnjr/kabir-dohas'
-          target='_blank'
-          rel='noopener noreferrer'
-          className='text-indigo-700 underline'
-        >
-          GitHub
-        </a>
-        . By making the code available to all, we aim to foster collaboration
-        and encourage improvements that can benefit the entire community.
-      </p>
-      <p className='text-gray-800 mt-4'>
-        If you have any questions, suggestions, or feedback, feel free to reach
-        out to us on Twitter at{' '}
-        <a
-          href='https://twitter.com/a5rz00n'
-          target='_blank'
-          rel='noopener noreferrer'
-          className='text-indigo-700 underline'
-        >
-          @a5rz00n
-        </a>
-        . We would be happy to hear from you and assist in any way we can.
-      </p>
+    <div className='serene-card p-10 max-w-2xl w-full border border-serene-accent/5'>
+      <h2 className='text-3xl font-serif font-bold mb-6 text-serene-text tracking-tight'>The Essence</h2>
+      <div className="space-y-6 text-lg font-sans text-serene-text/90 leading-relaxed">
+        <p>
+          This sanctuary is dedicated to the timeless wisdom of Kabir, the 15th-century
+          Indian mystic and saint. His verses, known as <span className="italic font-serif font-medium text-serene-accent">Dohas</span>, are couplets that carry profound spiritual truths with simplicity.
+        </p>
+        <p>
+          Our mission is to offer these teachings as a source of peace and clarity in the modern world, making the ancient path accessible to all seekers.
+        </p>
+        <p>
+          This experience was co-created with the assistance of advanced AI, bridging ancient wisdom with contemporary technology to foster a deeper understanding of our shared existence.
+        </p>
+        <p>
+          This project is an open offering to the community. You may explore the source, suggest refinements, or join the collaborative effort on{' '}
+          <a
+            href='https://github.com/bnjr/kabir-dohas'
+            target='_blank'
+            rel='noopener noreferrer'
+            className='text-serene-accent font-medium underline decoration-serene-accent/30 hover:decoration-serene-accent transition-all duration-300'
+          >
+            GitHub
+          </a>
+          .
+        </p>
+        <p>
+          Should you wish to connect, share reflections, or seek guidance on the platform, reach out via Twitter at{' '}
+          <a
+            href='https://twitter.com/a5rz00n'
+            target='_blank'
+            rel='noopener noreferrer'
+            className='text-serene-accent font-medium underline decoration-serene-accent/30 hover:decoration-serene-accent transition-all duration-300'
+          >
+            @a5rz00n
+          </a>
+          .
+        </p>
+      </div>
     </div>
   )
 }

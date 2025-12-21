@@ -51,37 +51,37 @@ const Home = () => {
         </div>
       ) : (
         <>
-          <div className="flex flex-col items-center mt-4 w-4/5 sm:w-2/3 lg:w-4/5 mx-auto">
-            <div className="mb-6 relative w-32 h-32 sm:w-40 sm:h-40 overflow-hidden rounded-full border-4 border-indigo-300 shadow-lg">
+          <div className="flex flex-col items-center mt-8 w-full max-w-2xl mx-auto">
+            <div className="mb-10 relative w-40 h-40 sm:w-48 sm:h-48 overflow-hidden rounded-3xl border-2 border-serene-accent/20 shadow-xl transform rotate-2 hover:rotate-0 transition-transform duration-500">
               <Image
                 src="/images/kabir.png"
                 alt="Sant Kabir"
                 fill
-                className="object-cover"
+                className="object-cover scale-110"
                 priority
               />
             </div>
-            <h1 className="text-2xl font-bold mb-4 text-indigo-200 text-center">
-              What does Kabir say about...
+            <h1 className="text-4xl font-serif font-semibold mb-8 text-serene-text text-center tracking-tight">
+              In search of wisdom...
             </h1>
             <SearchBar
               searchInput={searchInput}
               handleSearchInputChange={handleSearchInputChange}
               handleAskKabir={handleAskKabir}
             />
-            <hr className="w-full mb-4 border-t border-gray-300" />
+            <hr className="w-full mt-10 mb-8 border-t border-serene-accent/10" />
           </div>
           {loading && (
-            <div className="flex justify-center items-center mt-4">
+            <div className="flex justify-center items-center mt-8">
               <Spinner />
-              <p className="text-xl font-semibold text-indigo-200 ml-4">
-                Thinking...
+              <p className="text-lg font-sans text-serene-accent ml-4 animate-pulse">
+                Consulting Kabir...
               </p>
             </div>
           )}
           {foundDohas.length > 0 && (
-            <h2 className="text-xl font-bold mb-4 text-indigo-200">
-              Reference Dohas...
+            <h2 className="text-2xl font-serif font-medium mb-6 text-serene-accent px-4 italic">
+              Relevant Dohas...
             </h2>
           )}
           {foundDohas.map((doha) => (

@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from 'react'
-import {useAuth} from '@/context/AuthContext'
-import {DohaData} from '@/types/types'
+import React, { useEffect, useState } from 'react'
+import { useAuth } from '@/context/AuthContext'
+import { DohaData } from '@/types/types'
 import Doha from '@/components/Doha/Doha'
-import {useFavorite} from '@/context/FavoriteContext'
+import { useFavorite } from '@/context/FavoriteContext'
 import Spinner from '@/components/Utils/Spinner'
 
 const fetchDohaById = async (id: string): Promise<DohaData> => {
@@ -12,9 +12,9 @@ const fetchDohaById = async (id: string): Promise<DohaData> => {
 }
 
 const Favorites: React.FC = () => {
-  const {user} = useAuth()
+  const { user } = useAuth()
   const [favoriteDohas, setFavoriteDohas] = useState<DohaData[]>([])
-  const {favorites} = useFavorite()
+  const { favorites } = useFavorite()
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
@@ -36,25 +36,31 @@ const Favorites: React.FC = () => {
   }, [user, favorites])
 
   const signInPrompt = (
-    <div className='text-center'>
-      <p className='text-xl font-semibold text-gray-700 mt-4'>
-        Please sign in to view your favorites.
+    <div className='flex flex-col items-center justify-center py-20 px-6 serene-card mx-auto max-w-md border border-serene-accent/5'>
+      <p className='text-2xl font-serif font-semibold text-serene-text text-center'>
+        The path is personal.
+      </p>
+      <p className='text-serene-muted mt-2 text-center'>
+        Please sign in to keep your favorites.
       </p>
     </div>
   )
   return (
-    <div>
+    <div className="px-4">
+      <h1 className="text-4xl font-serif font-bold text-serene-text mb-12 text-center">Your Collection</h1>
       {!user ? (
         signInPrompt
       ) : loading ? (
-        <div className='flex justify-center items-center mt-4'>
+        <div className='flex justify-center items-center py-20'>
           <Spinner />
-          <p className='text-xl font-semibold text-gray-700 ml-4'>Loading...</p>
+          <p className='text-lg font-sans text-serene-accent ml-4 animate-pulse'>Recalling your collection...</p>
         </div>
       ) : favoriteDohas.length === 0 ? (
-        <p className='text-xl font-semibold text-gray-700 mt-4 text-center'>
-          No favorites found.
-        </p>
+        <div className="py-20 text-center">
+          <p className='text-xl font-serif italic text-serene-muted'>
+            Your journey is just beginning. Save wisdom to see it here.
+          </p>
+        </div>
       ) : (
         favoriteDohas.map((doha) => (
           <Doha key={doha.id} dohaData={doha} loading={false} />
