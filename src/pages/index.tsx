@@ -17,18 +17,20 @@ const Home = () => {
   const router = useRouter()
 
   useEffect(() => {
-    const randomDoha = async () => {
-      const doha = await fetchRandomDoha()
-      if (doha) setDohaData(doha)
+    if (router.query.randomDoha === 'true') {
+      const fetchDoha = async () => {
+        const doha = await fetchRandomDoha()
+        if (doha) setDohaData(doha)
+      }
+      fetchDoha()
+    } else {
+      setDohaData(null)
+      setFoundDohas([])
     }
-    if (router.query.randomDoha === 'true') randomDoha()
   }, [router.query.randomDoha])
 
   const handleGetRandomDoha = async () => {
-    setFoundDohas(() => [])
-    setDohaData(null)
-    const doha = await fetchRandomDoha()
-    if (doha) setDohaData(doha)
+    router.push(`/?randomDoha=true&t=${Date.now()}`, undefined, { shallow: true })
   }
 
   const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
