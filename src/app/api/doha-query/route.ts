@@ -9,7 +9,7 @@ export const runtime = 'nodejs'; // Use Node.js runtime for file system access
 export const dynamic = 'force-dynamic';
 
 async function getSystemPrompt() {
-  const promptPath = path.join(process.cwd(), 'prompt.txt');
+  const promptPath = path.join(process.cwd(), 'src/data/prompts/prompt.txt');
   const content = fs.readFileSync(promptPath, 'utf-8');
   // Use Ver 3 from the file
   const versions = content.split(/Ver \d+/);
