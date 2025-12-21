@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
+import Image from 'next/image'
 import SEOHead from '@/components/SEO/SEOHead'
 import HomePageButtons from '@/components/Page/HomePageButtons'
 import Doha from '@/components/Doha/Doha'
@@ -48,8 +49,17 @@ const Home = () => {
         </div>
       ) : (
         <>
-          <div className="flex flex-col items-start mt-4 w-4/5 sm:w-2/3 lg:w-4/5 mx-auto">
-            <h1 className="text-2xl font-bold mb-4 text-indigo-200">
+          <div className="flex flex-col items-center mt-4 w-4/5 sm:w-2/3 lg:w-4/5 mx-auto">
+            <div className="mb-6 relative w-32 h-32 sm:w-40 sm:h-40 overflow-hidden rounded-full border-4 border-indigo-300 shadow-lg">
+              <Image
+                src="/images/kabir.png"
+                alt="Sant Kabir"
+                fill
+                className="object-cover"
+                priority
+              />
+            </div>
+            <h1 className="text-2xl font-bold mb-4 text-indigo-200 text-center">
               What does Kabir say about...
             </h1>
             <SearchBar

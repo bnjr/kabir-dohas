@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'standalone',
   reactStrictMode: true,
   images: {
     remotePatterns: [
@@ -10,7 +11,6 @@ const nextConfig = {
     ],
   },
   experimental: {
-    appDir: true,
   },
   async rewrites() {
     return [
