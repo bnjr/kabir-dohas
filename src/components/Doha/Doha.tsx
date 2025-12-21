@@ -35,7 +35,7 @@ const DohaComponent: React.FC<DohaProps> = ({
     'serene-card p-8 w-full mb-10 transition-all duration-500 hover:shadow-2xl hover:-translate-y-1',
     {
       'max-w-3xl': details,
-      'max-w-md mx-auto hover:border-serene-accent/30': !details,
+      'max-w-xl mx-auto hover:border-serene-accent/30': !details,
     }
   )
   return dohaData ? (
@@ -55,9 +55,11 @@ const DohaComponent: React.FC<DohaProps> = ({
             <Link key={dohaData.id} href={`/doha/${dohaData.id}`} className="group block">
               <div className='relative'>
                 <span className="absolute -left-2 -top-2 text-4xl text-serene-accent/15 font-serif">"</span>
-                <p className='text-xl sm:text-2xl font-serif font-medium text-serene-text leading-relaxed group-hover:text-serene-accent transition-colors duration-300 text-center px-4'>
-                  {dohaData.doha_hi}
-                </p>
+                <div className='text-lg sm:text-xl md:text-2xl font-serif font-medium text-serene-text leading-relaxed group-hover:text-serene-accent transition-colors duration-300 text-center px-2 sm:px-4'>
+                  {dohaData.doha_hi.split('\n').map((line, index) => (
+                    <p key={index} className='mb-2 last:mb-0'>{line.trim()}</p>
+                  ))}
+                </div>
                 <span className="absolute -right-2 -bottom-2 text-4xl text-serene-accent/15 font-serif">"</span>
               </div>
               <p className="text-sm font-sans text-serene-muted mt-4 text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -70,9 +72,11 @@ const DohaComponent: React.FC<DohaProps> = ({
       {details && (
         <>
           <div className='border-y border-serene-accent/10 py-8 mb-8'>
-            <p className='text-2xl sm:text-3xl font-serif font-semibold text-serene-text text-center leading-relaxed italic'>
-              {dohaData.doha_hi}
-            </p>
+            <div className='text-2xl sm:text-3xl font-serif font-semibold text-serene-text text-center leading-loose italic space-y-2'>
+              {dohaData.doha_hi.split('\n').map((line, index) => (
+                <p key={index} className='mb-1'>{line.trim()}</p>
+              ))}
+            </div>
           </div>
           <div className="space-y-8">
             <section>
