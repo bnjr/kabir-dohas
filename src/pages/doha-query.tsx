@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import SEOHead from '@/components/SEO/SEOHead'
 import Spinner from '@/components/Utils/Spinner'
 import SynopsisCard from '@/components/Find/SynopsisCard'
+import PageNavigation from '@/components/Page/PageNavigation'
 import useFetchDohas from '@/hooks/useFetchDohas'
 import SearchBar from '@/components/Find/SearchBar'
 
@@ -73,6 +74,7 @@ const DohaQueryPage = () => {
             </div>
           )}
           {synopsis && <SynopsisCard synopsis={synopsis} />}
+          <PageNavigation />
         </>
       )}
     </>

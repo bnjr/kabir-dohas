@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import Image from 'next/image'
 import SEOHead from '@/components/SEO/SEOHead'
-import HomePageButtons from '@/components/Page/HomePageButtons'
+import PageNavigation from '@/components/Page/PageNavigation'
 import Doha from '@/components/Doha/Doha'
 import Spinner from '@/components/Utils/Spinner'
 import SearchBar from '@/components/Find/SearchBar'
@@ -16,8 +16,10 @@ const Home = () => {
   const { loading, error, fetchRandomDoha } = useFetchDohas()
   const router = useRouter()
 
+  const isRandomDohaView = router.query.randomDoha === 'true'
+
   useEffect(() => {
-    if (router.query.randomDoha === 'true') {
+    if (isRandomDohaView) {
       const fetchDoha = async () => {
         const doha = await fetchRandomDoha()
         if (doha) setDohaData(doha)
@@ -27,7 +29,7 @@ const Home = () => {
       setDohaData(null)
       setFoundDohas([])
     }
-  }, [router.query.randomDoha])
+  }, [router.query.randomDoha, router.query.t])
 
   const handleGetRandomDoha = async () => {
     router.push(`/?randomDoha=true&t=${Date.now()}`, undefined, { shallow: true })
@@ -51,26 +53,39 @@ const Home = () => {
         </div>
       ) : (
         <>
-          <div className="flex flex-col items-center mt-8 w-full max-w-2xl mx-auto">
-            <div className="mb-10 relative w-40 h-40 sm:w-48 sm:h-48 overflow-hidden rounded-3xl border-2 border-serene-accent/20 shadow-xl transform rotate-2 hover:rotate-0 transition-transform duration-500">
-              <Image
-                src="/images/kabir.png"
-                alt="Sant Kabir"
-                fill
-                className="object-cover scale-110"
-                priority
+          {/* Home View - Show Kabir image and search */}
+          {!isRandomDohaView && (
+            <div className="flex flex-col items-center mt-8 w-full max-w-2xl mx-auto">
+              <div className="mb-10 relative w-40 h-40 sm:w-48 sm:h-48 overflow-hidden rounded-3xl border-2 border-serene-accent/20 shadow-xl transform rotate-2 hover:rotate-0 transition-transform duration-500">
+                <Image
+                  src="/images/kabir.png"
+                  alt="Sant Kabir"
+                  fill
+                  className="object-cover scale-110"
+                  priority
+                />
+              </div>
+              <h1 className="text-4xl font-serif font-semibold mb-8 text-serene-text text-center tracking-tight">
+                In search of wisdom...
+              </h1>
+              <SearchBar
+                searchInput={searchInput}
+                handleSearchInputChange={handleSearchInputChange}
+                handleAskKabir={handleAskKabir}
               />
+              <hr className="w-full mt-10 mb-8 border-t border-serene-accent/10" />
             </div>
-            <h1 className="text-4xl font-serif font-semibold mb-8 text-serene-text text-center tracking-tight">
-              In search of wisdom...
-            </h1>
-            <SearchBar
-              searchInput={searchInput}
-              handleSearchInputChange={handleSearchInputChange}
-              handleAskKabir={handleAskKabir}
-            />
-            <hr className="w-full mt-10 mb-8 border-t border-serene-accent/10" />
-          </div>
+          )}
+
+          {/* Receive a Doha View - Clean header without image */}
+          {isRandomDohaView && (
+            <div className="flex flex-col items-center mt-8 w-full max-w-2xl mx-auto px-4">
+              <h1 className="text-4xl font-serif font-semibold mb-8 text-serene-text text-center tracking-tight">
+                Wisdom Received
+              </h1>
+            </div>
+          )}
+
           {loading && (
             <div className="flex justify-center items-center mt-8">
               <Spinner />
@@ -93,7 +108,7 @@ const Home = () => {
             />
           ))}
           {dohaData && <Doha dohaData={dohaData} loading={loading} details />}
-          <HomePageButtons fetchRandomDoha={handleGetRandomDoha} />
+          <PageNavigation onReceiveDoha={handleGetRandomDoha} />
         </>
       )}
     </>
