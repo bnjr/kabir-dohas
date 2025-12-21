@@ -35,7 +35,7 @@ const DohaComponent: React.FC<DohaProps> = ({
     'serene-card p-8 w-full mb-10 transition-all duration-500 hover:shadow-2xl hover:-translate-y-1',
     {
       'max-w-3xl': details,
-      'max-w-md mx-auto': !details,
+      'max-w-md mx-auto hover:border-serene-accent/30': !details,
     }
   )
   return dohaData ? (
@@ -46,11 +46,25 @@ const DohaComponent: React.FC<DohaProps> = ({
             Eternal Wisdom
           </h1>
         ) : (
-          <Link key={dohaData.id} href={`/doha/${dohaData.id}`} className="group">
-            <div className='text-xl sm:text-2xl font-serif font-medium text-serene-text leading-relaxed group-hover:text-serene-accent transition-colors duration-300'>
-              {dohaData.doha_hi}
+          <div className="w-full">
+            <div className='text-xs uppercase tracking-widest font-sans font-medium text-serene-accent/50 mb-4 flex items-center'>
+              <span className="w-8 h-px bg-serene-accent/20 mr-3"></span>
+              <span>दोहा</span>
+              <span className="w-8 h-px bg-serene-accent/20 ml-3"></span>
             </div>
-          </Link>
+            <Link key={dohaData.id} href={`/doha/${dohaData.id}`} className="group block">
+              <div className='relative'>
+                <span className="absolute -left-2 -top-2 text-4xl text-serene-accent/15 font-serif">"</span>
+                <p className='text-xl sm:text-2xl font-serif font-medium text-serene-text leading-relaxed group-hover:text-serene-accent transition-colors duration-300 text-center px-4'>
+                  {dohaData.doha_hi}
+                </p>
+                <span className="absolute -right-2 -bottom-2 text-4xl text-serene-accent/15 font-serif">"</span>
+              </div>
+              <p className="text-sm font-sans text-serene-muted mt-4 text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                Click to explore meaning →
+              </p>
+            </Link>
+          </div>
         )}
       </div>
       {details && (
@@ -76,7 +90,11 @@ const DohaComponent: React.FC<DohaProps> = ({
           </div>
         </>
       )}
-      <div className="mt-10 pt-6 border-t border-serene-accent/5">
+      <div className={classNames(
+        details
+          ? "mt-10 pt-6 border-t border-serene-accent/5"
+          : "mt-6 flex justify-center"
+      )}>
         <DohaActions dohaData={dohaData} />
       </div>
     </div>
