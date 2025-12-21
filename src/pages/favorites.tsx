@@ -4,6 +4,7 @@ import { DohaData } from '@/types/types'
 import Doha from '@/components/Doha/Doha'
 import { useFavorite } from '@/context/FavoriteContext'
 import Spinner from '@/components/Utils/Spinner'
+import SEOHead from '@/components/SEO/SEOHead'
 
 const fetchDohaById = async (id: string): Promise<DohaData> => {
   const response = await fetch(`/api/doha/${id}`)
@@ -46,27 +47,33 @@ const Favorites: React.FC = () => {
     </div>
   )
   return (
-    <div className="px-4">
-      <h1 className="text-4xl font-serif font-bold text-serene-text mb-12 text-center">Your Collection</h1>
-      {!user ? (
-        signInPrompt
-      ) : loading ? (
-        <div className='flex justify-center items-center py-20'>
-          <Spinner />
-          <p className='text-lg font-sans text-serene-accent ml-4 animate-pulse'>Recalling your collection...</p>
-        </div>
-      ) : favoriteDohas.length === 0 ? (
-        <div className="py-20 text-center">
-          <p className='text-xl font-serif italic text-serene-muted'>
-            Your journey is just beginning. Save wisdom to see it here.
-          </p>
-        </div>
-      ) : (
-        favoriteDohas.map((doha) => (
-          <Doha key={doha.id} dohaData={doha} loading={false} />
-        ))
-      )}
-    </div>
+    <>
+      <SEOHead
+        title="Your Favorites - Kabir's Dohas"
+        description="View and manage your collection of favorite Kabir dohas."
+      />
+      <div className="px-4">
+        <h1 className="text-4xl font-serif font-bold text-serene-text mb-12 text-center">Your Collection</h1>
+        {!user ? (
+          signInPrompt
+        ) : loading ? (
+          <div className='flex justify-center items-center py-20'>
+            <Spinner />
+            <p className='text-lg font-sans text-serene-accent ml-4 animate-pulse'>Recalling your collection...</p>
+          </div>
+        ) : favoriteDohas.length === 0 ? (
+          <div className="py-20 text-center">
+            <p className='text-xl font-serif italic text-serene-muted'>
+              Your journey is just beginning. Save wisdom to see it here.
+            </p>
+          </div>
+        ) : (
+          favoriteDohas.map((doha) => (
+            <Doha key={doha.id} dohaData={doha} loading={false} />
+          ))
+        )}
+      </div>
+    </>
   )
 }
 

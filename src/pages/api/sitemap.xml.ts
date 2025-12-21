@@ -7,6 +7,8 @@ const sitemapPages: { url: string }[] = [
   { url: '/' },
   { url: '/about' },
   { url: '/dohas' },
+  { url: '/favorites' },
+  { url: '/doha-query' },
 ];
 
 export default async function sitemapHandler(
