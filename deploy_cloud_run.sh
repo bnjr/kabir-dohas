@@ -29,8 +29,20 @@ deploy_args=(
 if [ -n "$ENV_VARS" ]; then
   echo "Setting runtime environment variables..."
   deploy_args+=(--set-env-vars="$ENV_VARS")
+  
+  # Create a temporary .env file for the build process
+  # This works because .env is not in .gitignore, so it's uploaded to Cloud Build
+  echo "Creating temporary .env for build process..."
+  cp .env.production .env
 else
   echo "Warning: No environment variables found in .env.production."
 fi
 
+echo "Running gcloud run deploy..."
 gcloud run deploy "${deploy_args[@]}"
+
+# Cleanup
+if [ -f .env ]; then
+  echo "Cleaning up temporary .env..."
+  rm .env
+fi

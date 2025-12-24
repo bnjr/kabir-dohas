@@ -38,6 +38,10 @@ async function test() {
 
         const userMessage = `"""\n${contextText}\n"""\n\nQuestion: ${query}`;
 
+        if (!groq) {
+            throw new Error('Groq client not initialized');
+        }
+
         const chatCompletion = await groq.chat.completions.create({
             model: 'llama-3.1-8b-instant',
             messages: [

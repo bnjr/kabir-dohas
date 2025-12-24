@@ -2,10 +2,10 @@ import OpenAI from 'openai';
 
 const apiKey = process.env.OPENAI_API_KEY;
 
-if (!apiKey) {
-    console.warn('OPENAI_API_KEY is not set in environment variables');
-}
+export const openai = apiKey
+    ? new OpenAI({ apiKey })
+    : null;
 
-export const openai = new OpenAI({
-    apiKey: apiKey,
-});
+if (!apiKey) {
+    console.warn('OPENAI_API_KEY is not set in environment variables. Skipping instantiation.');
+}

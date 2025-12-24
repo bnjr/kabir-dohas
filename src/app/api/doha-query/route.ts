@@ -44,6 +44,10 @@ export async function GET(request: NextRequest) {
     const userMessage = `"""\n${contextText}\n"""\n\nQuestion: ${query}`;
 
     // 4. Stream response from Groq
+    if (!groq) {
+      return NextResponse.json({ error: 'Groq client not initialized' }, { status: 500 });
+    }
+
     const stream = await groq.chat.completions.create({
       model: 'llama-3.3-70b-versatile',
 

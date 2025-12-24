@@ -13,8 +13,11 @@ const DohaPage: React.FC<DohaPageProps> = ({ dohaData }) => {
     <>
       <SEOHead
         title={`Kabir's Doha: ${dohaData.doha_hi}`}
-        description={`Read and understand Kabir's Doha: "${dohaData.doha_en}".`}
+        description={`Read and understand Kabir's Doha: "${dohaData.doha_en}". Meaning: ${dohaData.meaning_en}`}
+        keywords={`Kabir, Doha, ${dohaData.doha_hi}, Translation, Meaning, Sant Kabir, Wisdom`}
         url={`${process.env.NEXT_PUBLIC_BASE_URL}/doha/${dohaData.id}`}
+        type="doha"
+        dohaData={dohaData}
       />
       {dohaData && <Doha dohaData={dohaData} loading={false} details />}
       <DohaPageButtons />

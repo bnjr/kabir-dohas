@@ -10,12 +10,14 @@ interface SEOHeadProps {
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'https://kabir-dohas.vercel.app'
 
-const SEOHead: React.FC<SEOHeadProps> = ({
+const SEOHead: React.FC<SEOHeadProps & { type?: 'website' | 'doha'; dohaData?: any }> = ({
   title = "Kabir's Dohas",
   description = "Discover the wisdom of Kabir's Dohas, translated and explained.",
   keywords = 'Kabir, Dohas, Translation, Meaning, Spirituality, Hindi Poetry, Sant Kabir',
   imageUrl,
   url,
+  type = 'website',
+  dohaData,
 }) => {
   const fullUrl = url || BASE_URL
   const fullImageUrl = imageUrl
@@ -23,12 +25,8 @@ const SEOHead: React.FC<SEOHeadProps> = ({
     : `${BASE_URL}/images/kabir.png`
 
   // JSON-LD structured data for better search engine understanding
-  const structuredData = {
+  const structuredData: any = {
     '@context': 'https://schema.org',
-    '@type': 'WebSite',
-    name: "Kabir's Dohas",
-    description: description,
-    url: BASE_URL,
     inLanguage: ['en', 'hi'],
     author: {
       '@type': 'Person',
@@ -45,6 +43,28 @@ const SEOHead: React.FC<SEOHeadProps> = ({
     }
   }
 
+  if (type === 'doha' && dohaData) {
+    structuredData['@type'] = 'Quote'
+    structuredData['text'] = dohaData.doha_hi
+    structuredData['citation'] = 'Sant Kabir'
+    structuredData['translation'] = {
+      '@type': 'Message',
+      'language': 'en',
+      'text': dohaData.doha_en
+    }
+    structuredData['about'] = {
+      '@type': 'Thing',
+      'name': 'Wisdom',
+      'description': dohaData.meaning_en
+    }
+    structuredData['url'] = fullUrl
+  } else {
+    structuredData['@type'] = 'WebSite'
+    structuredData['name'] = "Kabir's Dohas"
+    structuredData['description'] = description
+    structuredData['url'] = BASE_URL
+  }
+
   return (
     <Head>
       {/* Primary Meta Tags */}
@@ -56,7 +76,7 @@ const SEOHead: React.FC<SEOHeadProps> = ({
       <meta name='author' content='Sant Kabir' />
 
       {/* Open Graph / Facebook */}
-      <meta property='og:type' content='website' />
+      <meta property='og:type' content={type === 'doha' ? 'article' : 'website'} />
       <meta property='og:url' content={fullUrl} />
       <meta property='og:title' content={title} />
       <meta property='og:description' content={description} />

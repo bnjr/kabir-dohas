@@ -2,10 +2,10 @@ import Groq from "groq-sdk";
 
 const apiKey = process.env.GROQ_API_KEY;
 
-if (!apiKey) {
-    console.warn('GROQ_API_KEY is not set in environment variables');
-}
+export const groq = apiKey
+    ? new Groq({ apiKey })
+    : null;
 
-export const groq = new Groq({
-    apiKey: apiKey,
-});
+if (!apiKey) {
+    console.warn('GROQ_API_KEY is not set in environment variables. Skipping instantiation.');
+}

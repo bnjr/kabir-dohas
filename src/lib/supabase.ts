@@ -14,7 +14,10 @@ export function createClient(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const supabase = createServerClient<Database>(supabaseUrl!, supabaseKey!, {
+  if (!supabaseUrl || !supabaseKey) {
+    throw new Error('Supabase configuration missing.')
+  }
+  const supabase = createServerClient<Database>(supabaseUrl, supabaseKey, {
     cookies: {
       get(name: string) {
         return req.cookies[name]
