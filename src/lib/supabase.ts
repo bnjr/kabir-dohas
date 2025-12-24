@@ -5,10 +5,9 @@ import { type NextApiRequest, type NextApiResponse } from 'next'
 const supabaseUrl = process.env.SUPABASE_URL
 const supabaseKey = process.env.SUPABASE_ANON_KEY
 if (!supabaseUrl || !supabaseKey) {
-  console.error(
-    'Missing Supabase configuration. Please check your environment variables.'
+  console.warn(
+    'Warning: Missing Supabase configuration. Supabase features will be disabled.'
   )
-  process.exit(1)
 }
 
 export function createClient(

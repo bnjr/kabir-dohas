@@ -1,13 +1,15 @@
 # Install dependencies only when needed
-FROM node:20-alpine AS deps
-RUN apk add --no-cache libc6-compat
+FROM node:20-slim AS deps
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libc6 \
+    && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 
 COPY package.json package-lock.json ./
 RUN npm ci
 
 # Rebuild the source code only when needed
-FROM node:20-alpine AS builder
+FROM node:20-slim AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
@@ -18,13 +20,16 @@ RUN npx tsx src/scripts/preload_model.ts
 RUN npm run build
 
 # Production image, copy all the files and run next
-FROM node:20-alpine AS runner
+FROM node:20-slim AS runner
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libstdc++6 libgomp1 \
+    && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 
-ENV NODE_ENV production
+ENV NODE_ENV=production
 
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
+RUN groupadd --system --gid 1001 nodejs
+RUN useradd --system --uid 1001 nextjs
 
 COPY --from=builder /app/public ./public
 
@@ -36,15 +41,19 @@ RUN chown nextjs:nodejs .next
 # https://nextjs.org/docs/advanced-features/output-file-tracing
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
 # Copy the preloaded model cache
-COPY --from=builder --chown=nextjs:nodejs /root/.cache/huggingface /home/nextjs/.cache/huggingface
+COPY --from=builder --chown=nextjs:nodejs /app/.model_cache /app/.model_cache
+
+# Manually copy native binaries that Next.js standalone tracing misses
+COPY --from=builder --chown=nextjs:nodejs /app/node_modules/@huggingface/transformers /app/node_modules/@huggingface/transformers
+COPY --from=builder --chown=nextjs:nodejs /app/node_modules/onnxruntime-node /app/node_modules/onnxruntime-node
 
 USER nextjs
 
-EXPOSE 3000
+EXPOSE 8080
 
-ENV PORT 3000
-# set hostname to localhost
-ENV HOSTNAME "0.0.0.0"
+# set hostname to 0.0.0.0 for accessibility
+ENV HOSTNAME="0.0.0.0"
 
 CMD ["node", "server.js"]

@@ -1,4 +1,7 @@
-import { pipeline } from '@huggingface/transformers';
+import { pipeline, env } from '@huggingface/transformers';
+
+// Set cache directory to the preloaded path
+env.cacheDir = './.model_cache';
 
 let extractor: any = null;
 
