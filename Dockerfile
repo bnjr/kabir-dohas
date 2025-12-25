@@ -1,5 +1,5 @@
 # Install dependencies only when needed
-FROM node:20-slim AS deps
+FROM node:23-slim AS deps
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libc6 \
     && rm -rf /var/lib/apt/lists/*
@@ -9,18 +9,18 @@ COPY package.json package-lock.json ./
 RUN npm ci
 
 # Rebuild the source code only when needed
-FROM node:20-slim AS builder
+FROM node:23-slim AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 # Pre-download the embedding model so it's baked into the image
-RUN npx tsx src/scripts/preload_model.ts
+RUN node --experimental-strip-types src/scripts/preload_model.ts
 
 RUN npm run build
 
 # Production image, copy all the files and run next
-FROM node:20-slim AS runner
+FROM node:23-slim AS runner
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libstdc++6 libgomp1 \
     && rm -rf /var/lib/apt/lists/*
@@ -40,6 +40,7 @@ RUN chown nextjs:nodejs .next
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/server.ts ./server.ts
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 # Copy the preloaded model cache
@@ -56,4 +57,4 @@ EXPOSE 8080
 # set hostname to 0.0.0.0 for accessibility
 ENV HOSTNAME="0.0.0.0"
 
-CMD ["node", "server.js"]
+CMD ["node", "--experimental-strip-types", "server.ts"]
