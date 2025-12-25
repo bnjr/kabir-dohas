@@ -9,11 +9,15 @@ echo "Using Project ID: $PROJECT_ID"
 echo "Service Name: $SERVICE_NAME"
 echo "Region: $REGION"
 
-# Check if .env.local exists to extract env vars
+# Check if .env.production exists to extract env vars
 if [ -f .env.production ]; then
   echo "Extracting environment variables from .env.production..."
-  # Extract non-empty, non-comment lines and join with comma
-  ENV_VARS=$(grep -v '^#' .env.production | grep -v '^[[:space:]]*$' | grep '=' | awk -F= '{print $1"="$2}' | paste -sd "," -)
+  # Use a custom delimiter (semi-colon) and prefix with ^;^ to avoid comma issues in JSON
+  # We use semi-colon because it's rare in service account JSONs (unlike commas or colons)
+  ENV_VARS=$(grep -v '^#' .env.production | grep -v '^[[:space:]]*$' | grep '=' | paste -sd ";" -)
+  if [ -n "$ENV_VARS" ]; then
+    ENV_VARS="^;^$ENV_VARS"
+  fi
 fi
 
 echo "Deploying service $SERVICE_NAME to $REGION..."
