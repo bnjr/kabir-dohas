@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { DohaData } from '@/types/types'
 import SEOHead from '@/components/SEO/SEOHead'
 import Doha from '@/components/Doha/Doha'
@@ -8,41 +8,41 @@ import useFetchDohas from '@/hooks/useFetchDohas'
 import useDebouncedWindowHeight from '@/hooks/useDebouncedWindowHeight'
 
 const DohasPage = () => {
-  const [initialLoad, setInitialLoad] = useState(true)
   const [dohas, setDohas] = useState<DohaData[]>([])
   const [currentPage, setCurrentPage] = useState(1)
   const { loading, error, fetchDohas } = useFetchDohas()
   const [itemsPerPage, setItemsPerPage] = useState(0)
   const windowHeight = useDebouncedWindowHeight(200)
+  const hasInitiallyLoaded = useRef(false)
 
   // Set an approximate height for each doha card and header
   const DOHA_CARD_HEIGHT = 200
   const HEADER_HEIGHT = 100
 
-  const loadDohas = async (page: number) => {
-    const newDohas = await fetchDohas({ page, itemsPerPage })
-    if (initialLoad) setDohas(() => [...(newDohas?.length ? newDohas : [])])
-    else
+  const loadDohas = useCallback(async (page: number, limit: number, isInitial: boolean) => {
+    const newDohas = await fetchDohas({ page, itemsPerPage: limit })
+    if (isInitial) {
+      setDohas(newDohas?.length ? newDohas : [])
+    } else {
       setDohas((prevDohas) => [
         ...prevDohas,
         ...(newDohas?.length ? newDohas : []),
       ])
-  }
+    }
+  }, [fetchDohas])
 
-  const fetchMoreDohas = () => {
-    setCurrentPage((prevPage) => {
-      const newPage = prevPage + 1
-      loadDohas(newPage)
-      return newPage
-    })
-  }
+  const fetchMoreDohas = useCallback(() => {
+    const nextPage = currentPage + 1
+    setCurrentPage(nextPage)
+    loadDohas(nextPage, itemsPerPage, false)
+  }, [currentPage, itemsPerPage, loadDohas])
 
   useEffect(() => {
-    if (itemsPerPage > 0) {
-      loadDohas(currentPage)
-      setInitialLoad(false)
+    if (itemsPerPage > 0 && !hasInitiallyLoaded.current) {
+      hasInitiallyLoaded.current = true
+      loadDohas(1, itemsPerPage, true)
     }
-  }, [itemsPerPage])
+  }, [itemsPerPage, loadDohas])
 
   useEffect(() => {
     if (windowHeight !== null) {
@@ -60,12 +60,13 @@ const DohasPage = () => {
   return (
     <>
       <SEOHead title="All Dohas" description="Browse all of Kabir's Dohas." />
-      <div className="mt-8">
-        {loading && initialLoad ? skeletons : null}
+      <div className="mt-8 px-4">
+        <h1 className="text-4xl font-serif font-bold text-serene-text mb-12 text-center">The Collection</h1>
+        {loading && !hasInitiallyLoaded.current ? skeletons : null}
         {dohas.map((doha) => (
           <Doha key={doha.id} dohaData={doha} loading={false} />
         ))}
-        {loading && !initialLoad ? skeletons : null}
+        {loading && hasInitiallyLoaded.current ? skeletons : null}
       </div>
       {error && (
         <div className="text-red-500 text-center my-4">

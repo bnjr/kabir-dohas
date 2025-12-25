@@ -26,6 +26,7 @@ yarn-error.log*
 
 # local env files
 .env*.local
+.env*.production
 
 # vercel
 .vercel
@@ -39,3 +40,7 @@ next-env.d.ts
 
 # scratchpad
 /scratchpad
+
+# models
+.model_cache/
+model_cache/

@@ -1,8 +1,9 @@
 // src/lib/incrementDohaViews.ts
 
 function hasDohaBeenViewed(dohaId: string): boolean {
+  if (typeof window === 'undefined') return false
   const viewedDohas = sessionStorage.getItem('viewedDohas')
-  return viewedDohas !== null && viewedDohas.split(',').includes(`${dohaId}`)
+  return !!viewedDohas && viewedDohas.split(',').includes(`${dohaId}`)
 }
 
 function markDohaAsViewed(dohaId: string): void {
@@ -22,7 +23,7 @@ export async function incrementDohaViews(dohaId: string) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({dohaId}),
+      body: JSON.stringify({ dohaId }),
     })
 
     if (response.ok) {

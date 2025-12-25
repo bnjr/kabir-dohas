@@ -1,24 +1,20 @@
 import React from 'react'
-import Link from 'next/link'
+import { faLayerGroup, faLeaf } from '@fortawesome/free-solid-svg-icons'
+import Button from '@/components/ui/Button'
 
 type HomePageButtonsProps = {
   fetchRandomDoha: () => void
 }
 
-const HomePageButtons: React.FC<HomePageButtonsProps> = ({fetchRandomDoha}) => {
+const HomePageButtons: React.FC<HomePageButtonsProps> = ({ fetchRandomDoha }) => {
   return (
-    <div className='flex justify-center mt-8 mb-4 space-x-4'>
-      <Link href='/dohas'>
-        <div className='bg-indigo-400 text-white py-2 px-4 rounded cursor-pointer hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50'>
-          Browse all Dohas
-        </div>
-      </Link>
-      <button
-        onClick={fetchRandomDoha}
-        className='bg-indigo-400 text-white py-2 px-4 rounded hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50'
-      >
-        Get A Random Doha
-      </button>
+    <div className='flex flex-wrap justify-center gap-6 mt-12 mb-8'>
+      <Button variant='secondary' icon={faLayerGroup} href='/dohas'>
+        Browse Collections
+      </Button>
+      <Button variant='primary' icon={faLeaf} onClick={fetchRandomDoha}>
+        Receive a Doha
+      </Button>
     </div>
   )
 }

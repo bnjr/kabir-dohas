@@ -9,11 +9,11 @@ interface MainLayoutProps {
 
 const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   return (
-    <div className='min-h-screen flex flex-col items-center bg-gradient-to-r from-indigo-500 via-indigo-600 to-indigo-700 p-4'>
+    <div className='min-h-screen flex flex-col items-center bg-serene-bg p-6'>
       <Header />
-      <div className='flex-grow w-full max-w-2xl flex flex-col justify-center'>
+      <main className='flex-grow w-full max-w-3xl flex flex-col pt-12 pb-16'>
         {children}
-      </div>
+      </main>
       <Footer />
     </div>
   )

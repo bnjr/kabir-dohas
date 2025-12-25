@@ -1,35 +1,31 @@
 // src/pages/api/doha/incrementviews.ts
 
-import {NextApiRequest, NextApiResponse} from 'next'
-import {firestoreAdmin} from '@/lib/firebaseAdminConfig'
+import { NextApiRequest, NextApiResponse } from 'next'
+import { firestoreAdmin } from '@/lib/firebaseAdminConfig'
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   if (req.method === 'POST') {
-    const {dohaId} = req.body
+    const { dohaId } = req.body
     if (!dohaId) {
-      return res.status(400).json({error: 'Doha ID is required'})
+      return res.status(400).json({ error: 'Doha ID is required' })
     }
-    
-    const dohaViewsRef = firestoreAdmin.collection('dohaViews')
-    const q = dohaViewsRef.where('dohaId', '==', dohaId)
-    const dohaViewSnapshot = await q.get()
-
-    if (dohaViewSnapshot.empty) {
-      // Create a new document with the dohaId and set the initial view count to 1
-      await dohaViewsRef.add({dohaId, views: 1})
-    } else {
-      // Increment the view count of the existing document
-      const dohaViewDoc = dohaViewSnapshot.docs[0]
-      await dohaViewsRef.doc(dohaViewDoc.id).update({
-        views: dohaViewDoc.data().views + 1,
-      })
+    if (!firestoreAdmin) {
+      return res.status(500).json({ error: 'Firestore admin not initialized' })
     }
 
-    return res.status(200).json({message: 'View count incremented'})
+    const { FieldValue } = require('firebase-admin/firestore')
+    const dohaViewsRef = firestoreAdmin.collection('dohaViews').doc(String(dohaId))
+
+    await dohaViewsRef.set({
+      dohaId: String(dohaId),
+      views: FieldValue.increment(1)
+    }, { merge: true })
+
+    return res.status(200).json({ message: 'View count incremented' })
   }
 
-  return res.status(405).json({error: 'Method not allowed'})
+  return res.status(405).json({ error: 'Method not allowed' })
 }

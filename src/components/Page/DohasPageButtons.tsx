@@ -1,5 +1,7 @@
 import React from 'react'
-import {useRouter} from 'next/router'
+import { useRouter } from 'next/router'
+import { faPlus, faLeaf, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
+import Button from '@/components/ui/Button'
 
 interface DohasPageButtonsProps {
   fetchMoreDohas: () => void
@@ -11,19 +13,20 @@ const DohasPageButtons: React.FC<DohasPageButtonsProps> = ({
   const router = useRouter()
 
   return (
-    <div className='flex justify-center mt-8'>
-      <button
-        className='mr-4 bg-indigo-400 text-white rounded px-4 py-2 hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50'
-        onClick={fetchMoreDohas}
+    <div className='flex flex-wrap justify-center gap-4 mt-12 mb-8 px-4'>
+      <Button variant='secondary' icon={faMagnifyingGlass} href='/'>
+        Search
+      </Button>
+      <Button variant='secondary' icon={faPlus} onClick={fetchMoreDohas}>
+        Expand Collection
+      </Button>
+      <Button
+        variant='primary'
+        icon={faLeaf}
+        onClick={() => router.push(`/?randomDoha=true&t=${Date.now()}`)}
       >
-        Get More Dohas
-      </button>
-      <button
-        className='bg-indigo-400 text-white rounded px-4 py-2 hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50'
-        onClick={() => router.push('/?randomDoha=true')}
-      >
-        Get A Random Doha
-      </button>
+        Receive a Doha
+      </Button>
     </div>
   )
 }

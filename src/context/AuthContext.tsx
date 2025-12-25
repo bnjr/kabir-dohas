@@ -1,7 +1,7 @@
-import React, {createContext, useContext, useEffect, useState} from 'react'
-import {onAuthStateChanged, User} from 'firebase/auth'
-import {signInWithPopup, GoogleAuthProvider, signOut} from 'firebase/auth'
-import {auth} from '@/lib/firebaseConfig'
+import React, { createContext, useContext, useEffect, useState } from 'react'
+import { onAuthStateChanged, User } from 'firebase/auth'
+import { signInWithPopup, GoogleAuthProvider, signOut } from 'firebase/auth'
+import { auth } from '@/lib/firebaseConfig'
 
 interface AuthContextProps {
   user: User | null
@@ -42,7 +42,7 @@ export const useAuth = () => {
   return useContext(AuthContext)
 }
 
-export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
+export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
 
@@ -56,7 +56,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
   }, [])
 
   return (
-    <AuthContext.Provider value={{user, loading, signIn, signOutUser}}>
+    <AuthContext.Provider value={{ user, loading, signIn, signOutUser }}>
       {children}
     </AuthContext.Provider>
   )

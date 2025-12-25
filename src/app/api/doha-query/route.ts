@@ -1,97 +1,89 @@
-// To stream responses you must use Route Handlers in the App Router, even if the rest of your app uses the Pages Router.
-import { NextRequest, NextResponse } from 'next/server'
-import { supabaseInfo } from '../../../lib'
-import { ChatCompletionChunk } from 'openai/resources'
+import { NextRequest, NextResponse } from 'next/server';
+import fs from 'fs';
+import path from 'path';
+import { groq } from '@/lib/groq';
+import { getEmbedding } from '@/lib/embeddings';
+import { searchDohasLocal } from '@/lib/vectorSearch';
 
-export const runtime = 'edge' // or 'nodejs' which uses Serverless Functions
-export const dynamic = 'force-dynamic' // always run dynamically
+export const runtime = 'nodejs'; // Use Node.js runtime for file system access
+export const dynamic = 'force-dynamic';
 
-async function streamDohaFinderResponse(query: string) {
-  const response = await fetch(
-    `${supabaseInfo().SUPABASE_URL}/functions/v1/doha-query`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${supabaseInfo().SUPABASE_ANON_KEY}`,
-      },
-      body: JSON.stringify({ query }),
-    }
-  )
-
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`)
-  }
-
-  const reader = response.body?.getReader()
-  const decoder = new TextDecoder('utf-8')
-  const encoder = new TextEncoder()
-
-  let buffer = ''
-
-  const processStream = (value: Uint8Array) => {
-    // Decode the stream chunk to text
-    const chunk = decoder.decode(value, { stream: true })
-    buffer += chunk
-
-    // Process the buffer line by line
-    let lines = buffer.split('\n')
-    buffer = lines.pop() || '' // Keep the last incomplete line in the buffer
-
-    let content = ''
-    lines.forEach((line) => {
-      if (line.startsWith('data: ')) {
-        const data: ChatCompletionChunk = JSON.parse(line.replace('data: ', ''))
-        const delta = data.choices[0].delta.content
-        // Accumulate content
-        content += delta
-      }
-    })
-    return content
-  }
-
-  const stream = new ReadableStream({
-    async start(controller) {
-      while (true && reader) {
-        const { done, value } = await reader.read()
-        if (done) break
-        // Directly enqueue the Uint8Array to the controller
-        const content = processStream(value)
-        content ? controller.enqueue(encoder.encode(content)) : null
-      }
-      controller.close()
-    },
-  })
-
-  return new Response(stream, {
-    headers: { 'Content-Type': 'text/plain; charset=utf-8' },
-  })
+async function getSystemPrompt() {
+  const promptPath = path.join(process.cwd(), 'src/data/prompts/prompt.txt');
+  const content = fs.readFileSync(promptPath, 'utf-8');
+  // Use Ver 3 from the file
+  const versions = content.split(/Ver \d+/);
+  return versions[3]?.trim() || versions[versions.length - 1]?.trim();
 }
 
-export async function GET(request: Request) {
-  const url = new URL(request.url)
-  const query = url.searchParams.get('query')
+export async function GET(request: NextRequest) {
+  const url = new URL(request.url);
+  const query = url.searchParams.get('query');
 
   if (!query) {
-    return new NextResponse(
-      JSON.stringify({ error: 'Query parameter is missing' }),
-      {
-        status: 400,
-        headers: { 'Content-Type': 'application/json' },
-      }
-    )
+    return NextResponse.json({ error: 'Query parameter is missing' }, { status: 400 });
   }
 
   try {
-    return await streamDohaFinderResponse(query)
-  } catch (error) {
-    console.error('Error in streaming doha-finder response:', error)
-    return new NextResponse(
-      JSON.stringify({ error: (error as unknown as Error).message }),
-      {
-        status: 500,
-        headers: { 'Content-Type': 'application/json' },
-      }
-    )
+    // 1. Get embedding for the user query (Free/Local)
+    const queryEmbedding = await getEmbedding(query);
+
+    // 2. Search for relevant dohas in the local JSON
+    const relevantDohas = await searchDohasLocal(queryEmbedding);
+
+    if (relevantDohas.length === 0) {
+      return NextResponse.json({ error: 'No relevant dohas found' }, { status: 404 });
+    }
+
+    // 3. Prepare the prompt
+    const systemPrompt = await getSystemPrompt();
+    const contextText = relevantDohas
+      .map(d => `Doha ID ${d.id}:\n${d.doha_hi}\n${d.doha_en}\nMeaning: ${d.meaning_en}`)
+      .join('\n\n');
+
+    const userMessage = `"""\n${contextText}\n"""\n\nQuestion: ${query}`;
+
+    // 4. Stream response from Groq
+    if (!groq) {
+      return NextResponse.json({ error: 'Groq client not initialized' }, { status: 500 });
+    }
+
+    const stream = await groq.chat.completions.create({
+      model: 'llama-3.3-70b-versatile',
+
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: userMessage },
+      ],
+      stream: true,
+    });
+
+    // Handle streaming to client
+    const encoder = new TextEncoder();
+    const customStream = new ReadableStream({
+      async start(controller) {
+        for await (const chunk of stream) {
+          const content = chunk.choices[0]?.delta?.content || '';
+          if (content) {
+            controller.enqueue(encoder.encode(content));
+          }
+        }
+        controller.close();
+      },
+    });
+
+    return new Response(customStream, {
+      headers: {
+        'Content-Type': 'text/plain; charset=utf-8',
+        'Transfer-Encoding': 'chunked',
+      },
+    });
+
+  } catch (error: any) {
+    console.error('Error in doha-query API:', error);
+    return NextResponse.json(
+      { error: error.message || 'There was an error processing your request' },
+      { status: 500 }
+    );
   }
 }
