@@ -24,6 +24,7 @@ deploy_args=(
   --source .
   --region "$REGION"
   --allow-unauthenticated
+  --memory 1Gi
 )
 
 if [ -n "$ENV_VARS" ]; then
