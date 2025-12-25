@@ -3,19 +3,19 @@
 ## Project Overview
 **Kabir Dohas** is a web application dedicated to the teachings of Kabir. It features a Q&A interface where users can ask questions and receive guidance based on Kabir's dohas, powered by AI. Users can browse the collection, receive random dohas, save favorites, and search for specific teachings.
 
-## Technology Stack
-- **Framework**: Next.js 16.0.10 (Pages Router)
-- **Language**: TypeScript
-- **Styling**: TailwindCSS 4.0
-- **AI & Vector Search**:
-    - **Groq**: Primary LLM provider for fast AI-powered responses (via `groq-sdk`).
-    - **@huggingface/transformers**: Used for generating local embeddings (Transformers.js).
-    - **Local Vector Store**: In-memory vector search for dohas using pre-computed embeddings.
-- **Database & Services**:
-    - **Firebase**: Primary service for **Authentication** (Google Auth) and **User Data** (favorites stored in Firestore).
-    - **Supabase**: Legacy references; primarily used for database types and schema definitions.
-- **Icons**: FontAwesome (via `@fortawesome/react-fontawesome`).
-- **Deployment**: Google Cloud Run (via `Dockerfile`).
+- **Technology Stack**
+    - **Framework**: Next.js 14.0.4 (Pages Router)
+    - **Language**: TypeScript
+    - **Styling**: TailwindCSS 3.4.1 (Note: Transitioning to 4.0 in some components)
+    - **AI & Vector Search**:
+        - **Groq**: Primary LLM provider for fast AI-powered responses (via `groq-sdk`).
+        - **@huggingface/transformers**: Used for generating local embeddings (Transformers.js).
+        - **Local Vector Store**: In-memory vector search for dohas using pre-computed embeddings.
+    - **Database & Services**:
+        - **Firebase**: Primary service for **Authentication** (Google Auth) and **User Data** (favorites and view counts stored in Firestore).
+        - **Supabase**: Legacy/Secondary; formerly used for database, now primarily for local development/test data or specific schema types. (Direct `supabase-js` usage has been minimized).
+    - **Icons**: FontAwesome (via `@fortawesome/react-fontawesome`).
+    - **Deployment**: Google Cloud Run (via `Dockerfile`).
 
 ## Directory Structure
 - **`/`**: Root configuration files (`package.json`, `next.config.js`, `tsconfig.json`, `Dockerfile`).
@@ -53,6 +53,7 @@
         - `prompts/`: AI persona prompt definitions.
     - **`scripts/`**: Build/utility scripts (`embed_dohas.ts`, `preload_model.ts`, `test_flow.ts`).
     - **`styles/`**: Global styles (`globals.css`).
+- **`.model_cache/`**: Ignored by git; stores downloaded Transformers.js models locally.
 
 ## Key Features & Workflows
 - **Vector-Based Q&A**:
@@ -67,6 +68,16 @@
 
 ## Key Configuration Files
 - **`src/data/prompts/`**: Defines the AI assistant's persona (wise Kabir devotee).
-- **`Dockerfile`**: Containerization for Google Cloud Run.
-- **`package.json`**: Project dependencies and scripts.
-- **`next.config.js`**: Next.js configuration.
+- **`Dockerfile`**: Containerization for Google Cloud Run. Includes build-time env var support.
+- **`deploy_cloud_run.sh`**: Main deployment script handling builds, secret passing, and Cloud Run updates.
+- **`package.json`**: Project dependencies and scripts. Includes `build:prod` for optimized production bundles.
+
+## Documentation
+- [Environment Setup](file:///Users/I072211/projects/kabir-dohas/docs/ENVIRONMENT.md): API keys and configuration.
+- [Architecture Overview](file:///Users/I072211/projects/kabir-dohas/docs/ARCHITECTURE.md): Technical design and system flows.
+
+## Memory & Performance
+- **Transformers.js**: Models are cached in `.model_cache` to avoid repeated downloads.
+- **Vector Search**: Performed in-memory for speed.
+- **Firestore**: Uses atomic `increment` for view counts to prevent race conditions. `firebaseAdminConfig.ts` ensures a singleton instance of the Admin SDK.
+- **Next.js Memory**: Search endpoints are optimized to stay within Cloud Run memory limits (512MB default, monitored for usage).
