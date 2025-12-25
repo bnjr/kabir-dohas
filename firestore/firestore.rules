@@ -7,7 +7,11 @@ service cloud.firestore {
     }
     match /dohaViews/{dohaId} {
       allow read: if true;
-      allow create, update: if request.auth != null;
+      allow create, update: if request.auth != null || request.resource.data.dohaId == dohaId;
+      // Allow unauthenticated users to increment view count via API? 
+      // Actually the rules should permit the API (which uses Admin SDK) regardless.
+      // But client-side Snapshot listener needs read.
+      // FavoriteContext needs write (updateFavoriteCount).
     }
   }
 }

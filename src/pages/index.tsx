@@ -62,6 +62,7 @@ const Home = () => {
                   alt="Sant Kabir"
                   fill
                   className="object-cover scale-110"
+                  sizes="(max-width: 768px) 160px, 192px"
                   priority
                 />
               </div>

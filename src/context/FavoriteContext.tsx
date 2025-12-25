@@ -1,6 +1,6 @@
-import React, {createContext, useContext, useState, useEffect} from 'react'
-import {firestore} from '@/lib/firebaseConfig'
-import {useAuth} from './AuthContext'
+import React, { createContext, useContext, useState, useEffect } from 'react'
+import { firestore } from '@/lib/firebaseConfig'
+import { useAuth } from './AuthContext'
 import {
   collection,
   getDocs,
@@ -9,7 +9,7 @@ import {
   deleteDoc,
   addDoc,
   doc,
-  updateDoc,
+  setDoc,
   increment,
 } from 'firebase/firestore'
 
@@ -38,7 +38,7 @@ interface FavoriteProviderProps {
 export const FavoriteProvider: React.FC<FavoriteProviderProps> = ({
   children,
 }) => {
-  const {user} = useAuth()
+  const { user } = useAuth()
   const [favorites, setFavorites] = useState<Record<string, boolean>>({})
 
   useEffect(() => {
@@ -67,24 +67,14 @@ export const FavoriteProvider: React.FC<FavoriteProviderProps> = ({
     dohaId: string,
     incrementValue: number
   ) => {
-    const dohaViewsRef = collection(firestore, 'dohaViews')
-    const dohaViewsQuery = query(dohaViewsRef, where('dohaId', '==', dohaId))
-    const dohaViewSnapshot = await getDocs(dohaViewsQuery)
+    const dohaViewRef = doc(firestore, 'dohaViews', String(dohaId))
 
-    if (dohaViewSnapshot.empty) {
-      // Create a new document with the dohaId and set the initial view count to 1
-      await addDoc(dohaViewsRef, {
-        dohaId: dohaId,
-        views: 1,
-        favoriteCount: 1,
-      })
-    } else {
-      // Increment/decrement the favorite count of the existing document
-      const dohaViewDoc = dohaViewSnapshot.docs[0]
-      await updateDoc(doc(dohaViewsRef, dohaViewDoc.id), {
-        favoriteCount: increment(incrementValue),
-      })
-    }
+    await setDoc(dohaViewRef, {
+      dohaId: String(dohaId),
+      favoriteCount: increment(incrementValue),
+      // Set views to 0 if document is new, otherwise it won't be affected by set merge 
+      // Actually views might exist, so we use merge
+    }, { merge: true })
   }
 
   const toggleFavorite = async (dohaId: string) => {
@@ -109,7 +99,7 @@ export const FavoriteProvider: React.FC<FavoriteProviderProps> = ({
       await updateFavoriteCount(dohaId, -1)
 
       setFavorites((prevFavorites) => {
-        const updatedFavorites = {...prevFavorites}
+        const updatedFavorites = { ...prevFavorites }
         delete updatedFavorites[dohaId]
         return updatedFavorites
       })
@@ -130,7 +120,7 @@ export const FavoriteProvider: React.FC<FavoriteProviderProps> = ({
   }
 
   return (
-    <FavoriteContext.Provider value={{favorites, setFavorites, toggleFavorite}}>
+    <FavoriteContext.Provider value={{ favorites, setFavorites, toggleFavorite }}>
       {children}
     </FavoriteContext.Provider>
   )

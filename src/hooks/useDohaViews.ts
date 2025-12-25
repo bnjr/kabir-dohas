@@ -1,11 +1,9 @@
-import {useState, useEffect} from 'react'
+import { useState, useEffect } from 'react'
 import {
-  collection,
+  doc,
   onSnapshot,
-  query,
-  where,
 } from 'firebase/firestore'
-import {firestore} from '@/lib/firebaseConfig'
+import { firestore } from '@/lib/firebaseConfig'
 
 const useDohaViews = (dohaId: string) => {
   const [views, setViews] = useState<number | null>(null)
@@ -18,23 +16,22 @@ const useDohaViews = (dohaId: string) => {
 
     const fetchViews = () => {
       try {
-        const viewsRef = collection(firestore, 'dohaViews')
-        const viewsQuery = query(viewsRef, where('dohaId', '==', dohaId))
+        const dohaViewRef = doc(firestore, 'dohaViews', String(dohaId))
 
         const unsubscribe = onSnapshot(
-          viewsQuery,
-          (querySnapshot) => {
-            if (!querySnapshot.empty) {
-              const docData = querySnapshot.docs[0].data()
-              setViews(docData.views)
-              setFavoriteCount(docData.favoriteCount)
+          dohaViewRef,
+          (docSnapshot: any) => {
+            if (docSnapshot.exists()) {
+              const docData = docSnapshot.data()
+              setViews(docData.views || 0)
+              setFavoriteCount(docData.favoriteCount || 0)
             } else {
               setViews(0)
               setFavoriteCount(0)
             }
             setLoading(false)
           },
-          (err) => {
+          (err: any) => {
             setError(err.message)
             setLoading(false)
           }
@@ -55,7 +52,7 @@ const useDohaViews = (dohaId: string) => {
     }
   }, [dohaId])
 
-  return {views, favoriteCount, loading, error}
+  return { views, favoriteCount, loading, error }
 }
 
 export default useDohaViews
