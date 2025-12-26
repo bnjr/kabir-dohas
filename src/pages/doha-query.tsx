@@ -54,7 +54,7 @@ const DohaQueryPage = () => {
         </div>
       ) : (
         <>
-          <div className="flex flex-col items-center mt-8 w-full max-w-2xl mx-auto">
+          <div className="flex flex-col items-center mt-8 w-full max-w-2xl mx-auto px-4 sm:px-6">
             <h1 className="text-3xl font-serif font-semibold mb-8 text-serene-text text-center tracking-tight">
               Seeking wisdom on...
             </h1>

@@ -6,11 +6,17 @@ let firestoreAdmin: any = null
 if (process.env.FIREBASE_SERVICE_ACCOUNT) {
   try {
     let saString = process.env.FIREBASE_SERVICE_ACCOUNT.trim()
-    // Remove wrapping quotes if present
+    // Remove wrapping quotes if present (handles both single and double quotes)
     if ((saString.startsWith("'") && saString.endsWith("'")) ||
       (saString.startsWith('"') && saString.endsWith('"'))) {
-      saString = saString.slice(1, -1)
+      saString = saString.slice(1, -1).trim()
     }
+
+    // Further check for common copy-paste errors or multi-line truncations
+    if (!saString.startsWith('{')) {
+      throw new Error(`Invalid JSON format: string starts with "${saString.substring(0, 10)}..."`)
+    }
+
     const serviceAccount = JSON.parse(saString)
     if (getApps().length === 0) {
       initializeApp({
@@ -22,7 +28,10 @@ if (process.env.FIREBASE_SERVICE_ACCOUNT) {
     }
     firestoreAdmin = getFirestore()
   } catch (error) {
-    console.error('Error initializing Firebase Admin with service account:', error)
+    console.error('Error initializing Firebase Admin with service account:')
+    console.error('- Message:', error instanceof Error ? error.message : String(error))
+    console.error('- String length:', process.env.FIREBASE_SERVICE_ACCOUNT?.length)
+    console.error('- Prefix:', process.env.FIREBASE_SERVICE_ACCOUNT?.substring(0, 20))
     // Fallback logic below if service account fails
   }
 }

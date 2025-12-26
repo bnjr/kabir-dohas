@@ -55,7 +55,7 @@ const Home = () => {
         <>
           {/* Home View - Show Kabir image and search */}
           {!isRandomDohaView && (
-            <div className="flex flex-col items-center mt-8 w-full max-w-2xl mx-auto">
+            <div className="flex flex-col items-center mt-8 w-full max-w-2xl mx-auto px-4 sm:px-6">
               <div className="mb-10 relative w-40 h-40 sm:w-48 sm:h-48 overflow-hidden rounded-3xl border-2 border-serene-accent/20 shadow-xl transform rotate-2 hover:rotate-0 transition-transform duration-500">
                 <Image
                   src="/images/kabir.png"
