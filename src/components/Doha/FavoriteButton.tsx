@@ -33,14 +33,14 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = ({
   }
   return (
     <div className='relative'>
-      <div className='flex items-center space-x-1'>
-        <span className='text-xl text-gray-500'>{favoriteCount}</span>
-        <button onClick={handleClick}>
+      <div className='flex items-center gap-1.5'>
+        <span className='text-base font-medium text-serene-muted'>{favoriteCount}</span>
+        <button onClick={handleClick} className="hover:scale-110 transition-transform duration-200">
           <FontAwesomeIcon
             icon={isFavorite ? faSolidHeart : faRegularHeart}
-            className={isFavorite ? 'text-red-500' : 'text-gray-500'}
+            className={isFavorite ? 'text-red-500' : 'text-serene-accent'}
             aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
-            size='xl'
+            size='lg'
           />
         </button>
       </div>

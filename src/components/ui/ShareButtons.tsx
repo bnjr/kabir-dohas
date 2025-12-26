@@ -4,7 +4,7 @@ import {
   TwitterShareButton,
   WhatsappShareButton,
 } from 'react-share'
-import { FacebookIcon, TwitterIcon, WhatsappIcon } from 'react-share'
+import { FacebookIcon, XIcon, WhatsappIcon } from 'react-share'
 import copy from 'copy-to-clipboard'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCopy } from '@fortawesome/free-solid-svg-icons'
@@ -38,7 +38,7 @@ const ShareButtons: React.FC<ShareButtonsProps> = ({
         <FacebookIcon size={32} round />
       </FacebookShareButton>
       <TwitterShareButton url={url} title={title}>
-        <TwitterIcon size={32} round />
+        <XIcon size={32} round />
       </TwitterShareButton>
       <WhatsappShareButton url={url} title={title}>
         <WhatsappIcon size={32} round />

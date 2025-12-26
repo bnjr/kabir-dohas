@@ -2,10 +2,16 @@ import React from 'react'
 import { DohaData } from '../../types/types'
 import DohaSkeleton from './DohaSkeleton'
 import Link from 'next/link'
-import DohaActions from './Actions/DohaActions'
 import { useEffect } from 'react'
 import { incrementDohaViews } from '@/lib/incrementDohaViews'
 import classNames from 'classnames'
+
+// New Action Components
+import AudioButton from '../ui/AudioButton'
+import ShareButtons from '../ui/ShareButtons'
+import FavoriteButton from './FavoriteButton'
+import ViewCounter from './ViewCounter'
+import useDohaViews from '@/hooks/useDohaViews'
 
 interface DohaProps {
   dohaData: DohaData | null
@@ -18,6 +24,8 @@ const DohaComponent: React.FC<DohaProps> = ({
   loading,
   details = false,
 }) => {
+  const { views, favoriteCount } = useDohaViews(dohaData?.id || '')
+
   useEffect(() => {
     const addView = async () => {
       if (!loading && dohaData) {
@@ -32,7 +40,7 @@ const DohaComponent: React.FC<DohaProps> = ({
   }
 
   const cardClasses = classNames(
-    'serene-card p-8 w-full mb-10 transition-all duration-500 hover:shadow-2xl hover:-translate-y-1',
+    'serene-card px-5 py-8 sm:p-8 w-full mb-10 transition-all duration-500 hover:shadow-2xl hover:-translate-y-1',
     {
       'max-w-3xl': details,
       'max-w-xl mx-auto hover:border-serene-accent/30': !details,
@@ -40,22 +48,36 @@ const DohaComponent: React.FC<DohaProps> = ({
   )
   return dohaData ? (
     <div className={cardClasses}>
-      <div className='flex justify-between items-start mb-6'>
+      <div className='flex justify-between items-start mb-6 w-full'>
         {details ? (
-          <h1 className='text-sm uppercase tracking-widest font-sans font-semibold text-serene-accent/60'>
-            Eternal Wisdom
-          </h1>
+          <>
+            <h1 className='text-sm uppercase tracking-widest font-sans font-semibold text-serene-accent/60'>
+              Eternal Wisdom
+            </h1>
+            {dohaData && (
+              <div className='scale-75 origin-right'>
+                <AudioButton text={dohaData.doha_hi} />
+              </div>
+            )}
+          </>
         ) : (
           <div className="w-full">
-            <div className='text-xs uppercase tracking-widest font-sans font-medium text-serene-accent/50 mb-4 flex items-center'>
-              <span className="w-8 h-px bg-serene-accent/20 mr-3"></span>
-              <span>दोहा</span>
-              <span className="w-8 h-px bg-serene-accent/20 ml-3"></span>
+            <div className='text-xs uppercase tracking-widest font-sans font-medium text-serene-accent/50 mb-4 flex items-center justify-between'>
+              <div className='flex items-center'>
+                <span className="w-8 h-px bg-serene-accent/20 mr-3"></span>
+                <span>दोहा</span>
+                <span className="w-8 h-px bg-serene-accent/20 ml-3"></span>
+              </div>
+              {dohaData && (
+                <div className='scale-75 origin-right'>
+                  <AudioButton text={dohaData.doha_hi} />
+                </div>
+              )}
             </div>
             <Link key={dohaData.id} href={`/doha/${dohaData.id}`} className="group block">
               <div className='relative'>
                 <span className="absolute -left-2 -top-2 text-4xl text-serene-accent/15 font-serif">"</span>
-                <div className='text-lg sm:text-xl md:text-2xl font-serif font-medium text-serene-text leading-relaxed group-hover:text-serene-accent transition-colors duration-300 text-center px-2 sm:px-4'>
+                <div className='text-base sm:text-xl md:text-2xl font-serif font-medium text-serene-text leading-relaxed group-hover:text-serene-accent transition-colors duration-300 text-center px-2 sm:px-4'>
                   {dohaData.doha_hi.split('\n').map((line, index) => (
                     <p key={index} className='mb-2 last:mb-0'>{line.trim()}</p>
                   ))}
@@ -72,7 +94,7 @@ const DohaComponent: React.FC<DohaProps> = ({
       {details && (
         <>
           <div className='border-y border-serene-accent/10 py-8 mb-8'>
-            <div className='text-2xl sm:text-3xl font-serif font-semibold text-serene-text text-center leading-loose italic space-y-2'>
+            <div className='text-xl sm:text-3xl font-serif font-semibold text-serene-text text-center leading-loose italic space-y-2'>
               {dohaData.doha_hi.split('\n').map((line, index) => (
                 <p key={index} className='mb-1'>{line.trim()}</p>
               ))}
@@ -95,11 +117,24 @@ const DohaComponent: React.FC<DohaProps> = ({
         </>
       )}
       <div className={classNames(
-        details
-          ? "mt-10 pt-6 border-t border-serene-accent/5"
-          : "mt-6 flex justify-center"
+        "mt-8 pt-6 border-t border-serene-accent/5 flex items-center justify-between",
+        { "px-2": !details }
       )}>
-        <DohaActions dohaData={dohaData} />
+        <div className='flex items-center gap-6'>
+          <ViewCounter views={views ?? 0} />
+          <FavoriteButton dohaId={dohaData.id} favoriteCount={favoriteCount ?? 0} />
+        </div>
+        <div className='scale-90 origin-right'>
+          <ShareButtons
+            url={
+              typeof window !== 'undefined'
+                ? `${window.location.origin}/doha/${dohaData.id}`
+                : ''
+            }
+            title={`Kabir's Doha: ${dohaData.doha_hi}`}
+            description={dohaData.doha_en}
+          />
+        </div>
       </div>
     </div>
   ) : (

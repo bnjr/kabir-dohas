@@ -78,44 +78,59 @@ export const FavoriteProvider: React.FC<FavoriteProviderProps> = ({
   }
 
   const toggleFavorite = async (dohaId: string) => {
-    if (!user) {
-      return
-    }
-    const favoritesRef = collection(firestore, 'favorites')
+    if (!user) return
 
-    if (favorites[dohaId]) {
-      // Remove from favorite
-      const favoriteQuery = query(
-        favoritesRef,
-        where('userId', '==', user.uid),
-        where('dohaId', '==', dohaId)
-      )
-      const querySnapshot = await getDocs(favoriteQuery)
+    const isCurrentlyFavorite = !!favorites[dohaId]
 
-      querySnapshot.forEach(async (favDoc) => {
-        await deleteDoc(doc(firestore, 'favorites', favDoc.id))
+    // 1. Optimistically update UI
+    setFavorites((prev) => {
+      const next = { ...prev }
+      if (isCurrentlyFavorite) {
+        delete next[dohaId]
+      } else {
+        next[dohaId] = true
+      }
+      return next
+    })
+
+    try {
+      const favoritesRef = collection(firestore, 'favorites')
+
+      if (isCurrentlyFavorite) {
+        // Remove from favorite
+        const favoriteQuery = query(
+          favoritesRef,
+          where('userId', '==', user.uid),
+          where('dohaId', '==', dohaId)
+        )
+        const querySnapshot = await getDocs(favoriteQuery)
+
+        const deletePromises = querySnapshot.docs.map((favDoc) =>
+          deleteDoc(doc(firestore, 'favorites', favDoc.id))
+        )
+        await Promise.all(deletePromises)
+        await updateFavoriteCount(dohaId, -1)
+      } else {
+        // Add to favorite
+        await addDoc(favoritesRef, {
+          userId: user.uid,
+          dohaId: dohaId,
+        })
+        await updateFavoriteCount(dohaId, 1)
+      }
+    } catch (error) {
+      console.error('Failed to toggle favorite:', error)
+      // 2. Rollback on failure
+      setFavorites((prev) => {
+        const next = { ...prev }
+        if (isCurrentlyFavorite) {
+          next[dohaId] = true
+        } else {
+          delete next[dohaId]
+        }
+        return next
       })
-
-      await updateFavoriteCount(dohaId, -1)
-
-      setFavorites((prevFavorites) => {
-        const updatedFavorites = { ...prevFavorites }
-        delete updatedFavorites[dohaId]
-        return updatedFavorites
-      })
-    } else {
-      // Add to favorite
-      await addDoc(favoritesRef, {
-        userId: user.uid,
-        dohaId: dohaId,
-      })
-
-      await updateFavoriteCount(dohaId, 1)
-
-      setFavorites((prevFavorites) => ({
-        ...prevFavorites,
-        [dohaId]: true,
-      }))
+      // Optional: Add a toast notification here to inform the user
     }
   }
 
