@@ -31,20 +31,19 @@ const ShareButtons: React.FC<ShareButtonsProps> = ({
   }
 
   return (
-    <div className='flex'>
+    <div className='flex gap-2'>
       <FacebookShareButton
         url={url}
-        className='mr-2'
       >
         <FacebookIcon size={32} round />
       </FacebookShareButton>
-      <TwitterShareButton url={url} title={title} className='mr-2'>
+      <TwitterShareButton url={url} title={title}>
         <TwitterIcon size={32} round />
       </TwitterShareButton>
-      <WhatsappShareButton url={url} title={title} className='mr-2'>
+      <WhatsappShareButton url={url} title={title}>
         <WhatsappIcon size={32} round />
       </WhatsappShareButton>
-      <div className='relative mr-2'>
+      <div className='relative'>
         <button
           onClick={handleCopyLink}
           className='focus:outline-none cursor-pointer bg-serene-muted text-white rounded-full p-2 w-9 h-9 flex items-center justify-center hover:bg-serene-accent transition-colors duration-300 shadow-sm'

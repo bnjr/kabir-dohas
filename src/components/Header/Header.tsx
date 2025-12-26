@@ -16,9 +16,9 @@ const Header = () => {
 
   return (
     <header
-      className={`sticky top-0 z-50 py-6 w-full transition-all duration-300 border-b ${isScrolled
-          ? 'bg-serene-bg/95 backdrop-blur-md shadow-sm border-serene-accent/10'
-          : 'bg-transparent border-transparent'
+      className={`sticky top-0 z-50 py-3 sm:py-6 w-full transition-all duration-300 border-b ${isScrolled
+        ? 'bg-serene-bg/95 backdrop-blur-md shadow-sm border-serene-accent/10'
+        : 'bg-transparent border-transparent'
         }`}
     >
       <div className='max-w-3xl mx-auto'>

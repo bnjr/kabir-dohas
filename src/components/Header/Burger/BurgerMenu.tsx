@@ -29,7 +29,7 @@ const BurgerMenu = () => {
       {isOpen && (
         <nav
           ref={menuRef}
-          className='absolute top-14 left-4 serene-card bg-white/95 w-56 z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-300'
+          className='absolute top-11 left-4 serene-card bg-white/95 w-56 z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-300'
         >
           <ul className='flex flex-col py-2'>
             {menuItems.map((item) => (

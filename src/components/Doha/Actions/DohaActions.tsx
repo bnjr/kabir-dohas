@@ -15,7 +15,7 @@ const DohaActions: React.FC<DohaActionsProps> = ({ dohaData }) => {
   const { views, favoriteCount } = useDohaViews(dohaData.id)
 
   return (
-    <div className='flex items-center space-x-4 mt-6'>
+    <div className='flex flex-wrap items-center justify-center sm:justify-start gap-4 mt-6'>
       <ViewCounter views={views ?? 0} />
       <FavoriteButton dohaId={dohaData.id} favoriteCount={favoriteCount ?? 0} />
       <AudioButton text={dohaData.doha_hi} />

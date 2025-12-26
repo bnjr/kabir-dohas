@@ -41,7 +41,7 @@ const ProfileMenu: React.FC = () => {
       {isOpen && (
         <nav
           ref={profileMenuRef}
-          className='absolute top-14 right-4 serene-card bg-white/95 w-56 z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-300'
+          className='absolute top-11 right-4 serene-card bg-white/95 w-56 z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-300'
         >
           <ul className='flex flex-col py-2'>
             {user ? (
