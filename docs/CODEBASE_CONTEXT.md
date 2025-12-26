@@ -4,9 +4,9 @@
 **Kabir Dohas** is a web application dedicated to the teachings of Kabir. It features a Q&A interface where users can ask questions and receive guidance based on Kabir's dohas, powered by AI. Users can browse the collection, receive random dohas, save favorites, and search for specific teachings.
 
 - **Technology Stack**
-    - **Framework**: Next.js 14.0.4 (Pages Router)
+    - **Framework**: Next.js 16.0.10 (App Router)
     - **Language**: TypeScript
-    - **Styling**: TailwindCSS 3.4.1 (Note: Transitioning to 4.0 in some components)
+    - **Styling**: TailwindCSS 4.0.0
     - **AI & Vector Search**:
         - **Groq**: Primary LLM provider for fast AI-powered responses (via `groq-sdk`).
         - **@huggingface/transformers**: Used for generating local embeddings (Transformers.js).
@@ -21,18 +21,20 @@
 - **`/`**: Root configuration files (`package.json`, `next.config.js`, `tsconfig.json`, `Dockerfile`).
 - **`public/`**: Static assets (`favicon.ico`, `images/`).
 - **`src/`**: Source code.
-    - **`pages/`**: Next.js pages (file-based routing).
-        - `index.tsx`: Home page entry point.
+    - **`app/`**: Next.js App Router root.
+        - `api/`: Unified API routes (`dohas/`, `randomdoha/`, `doha/[id]/`, `sitemap.xml/`).
+        - `layout.tsx`: Root layout.
+        - `page.tsx`: Home page entry point.
+    - **`pages/`**: Legacy Pages Router (Remaining pages being migrated).
         - `doha-query.tsx`: AI-powered doha Q&A page.
         - `dohas.tsx`: Browse collection page.
         - `favorites.tsx`: User favorites page.
-        - `api/`: API routes (`doha-finder.ts`, `dohas.ts`, `randomdoha.ts`, `sitemap.xml.ts`).
     - **`components/`**: React components organized by feature.
         - `Doha/`: Doha display components (`Doha.tsx`, `DohaSkeleton.tsx`, `Actions/`).
         - `Header/`: Header, burger menu, and profile components.
         - `Footer/`: Footer component.
-        - `Page/`: Page-level buttons and navigation (`PageNavigation.tsx`, `HomePageButtons.tsx`).
-        - `Find/`: Search-related components.
+        - `Page/`: Unified navigation (`PageNavigation.tsx`).
+        - `Find/`: Search and Mood components.
         - `Layouts/`: Layout wrappers.
         - `SEO/`: SEO meta components.
         - `Utils/`: Utility components.

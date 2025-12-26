@@ -110,7 +110,7 @@ const Home = () => {
           )}
           {foundDohas.map((doha) => (
             <Doha
-              key={dohaData?.id}
+              key={doha.id}
               dohaData={doha}
               loading={loading}
               details

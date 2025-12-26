@@ -21,6 +21,7 @@ This document lists the required environment variables for local development and
 | `FIREBASE_PROJECT_ID` | Firebase project ID for Admin SDK. |
 | `FIREBASE_CLIENT_EMAIL` | Firebase service account email. |
 | `FIREBASE_PRIVATE_KEY` | Firebase service account private key (newline escaped). |
+| `FIREBASE_SERVICE_ACCOUNT` | **Recommended**: Full JSON string of the service account. |
 
 ### AI Providers
 | Variable | Description |

@@ -8,7 +8,7 @@ interface SEOHeadProps {
   url?: string
 }
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'https://kabir-dohas.vercel.app'
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'https://kabir.ckoapp.com'
 
 const SEOHead: React.FC<SEOHeadProps & { type?: 'website' | 'doha'; dohaData?: any }> = ({
   title = "Kabir's Dohas",

@@ -7,7 +7,7 @@ This document describes the high-level architecture of the Kabir Dohas applicati
 ```mermaid
 graph TD
     User((User))
-    NextJS[Next.js App /Pages Router/]
+    NextJS[Next.js 16 App Router]
     TransformersJS[Transformers.js /Local Embeddings/]
     Groq[Groq API /LLM/]
     Firestore[Firebase Firestore]
@@ -33,8 +33,8 @@ graph TD
 6. **Response**: Groq returns a response that explains the dohas in the context of the user's question.
 
 ### 2. View Count Tracking
-1. When a user views a doha details page, an API call is made to `incrementviews.ts`.
-2. The server-side code uses `firebase-admin` to perform an **atomic increment** on the `viewCount` field in the `dohaViews` collection.
+1. When a user views a doha details page, an API call is made to the unified endpoint `/api/doha/[id]`.
+2. The server-side code (App Router handler) uses `firebase-admin` to perform an **atomic increment** on the `viewCount` field in the `dohaViews` collection.
 3. Document IDs in `dohaViews` are exactly matching the `dohaId` of the doha for direct lookup.
 
 ### 3. Favorites
