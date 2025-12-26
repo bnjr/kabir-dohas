@@ -1,10 +1,11 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { getRandomDoha } from '@/lib/dohaStore'
+import { getRandomDoha, getDohaOfDay } from '@/lib/dohaStore'
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'GET') {
     try {
-      const doha = getRandomDoha()
+      const { daily } = req.query
+      const doha = daily === 'true' ? getDohaOfDay() : getRandomDoha()
       if (doha) {
         res.status(200).json(doha)
       } else {

@@ -17,11 +17,12 @@ const Home = () => {
   const router = useRouter()
 
   const isRandomDohaView = router.query.randomDoha === 'true'
+  const isDaily = router.query.daily === 'true'
 
   useEffect(() => {
     if (isRandomDohaView) {
       const fetchDoha = async () => {
-        const doha = await fetchRandomDoha()
+        const doha = await fetchRandomDoha(isDaily)
         if (doha) setDohaData(doha)
       }
       fetchDoha()
@@ -29,10 +30,10 @@ const Home = () => {
       setDohaData(null)
       setFoundDohas([])
     }
-  }, [router.query.randomDoha, router.query.t])
+  }, [router.query.randomDoha, router.query.daily, router.query.t])
 
   const handleGetRandomDoha = async () => {
-    router.push(`/?randomDoha=true&t=${Date.now()}`, undefined, { shallow: true })
+    router.push(`/?randomDoha=true&daily=true&t=${Date.now()}`, undefined, { shallow: true })
   }
 
   const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -82,7 +83,7 @@ const Home = () => {
           {isRandomDohaView && (
             <div className="flex flex-col items-center mt-8 w-full max-w-2xl mx-auto px-4">
               <h1 className="text-4xl font-serif font-semibold mb-8 text-serene-text text-center tracking-tight">
-                Wisdom Received
+                {isDaily ? 'Doha of the Day' : 'Wisdom Received'}
               </h1>
             </div>
           )}

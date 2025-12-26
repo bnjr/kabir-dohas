@@ -37,6 +37,26 @@ export function getRandomDoha(): DohaData | null {
     return dohas[randomIndex];
 }
 
+export function getDohaOfDay(): DohaData | null {
+    const dohas = getDohas();
+    if (dohas.length === 0) return null;
+
+    // Create a seed based on the date YYYY-MM-DD
+    const date = new Date();
+    const dateString = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+
+    // Simple hash for the seed
+    let hash = 0;
+    for (let i = 0; i < dateString.length; i++) {
+        const char = dateString.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash; // Convert to 32bit integer
+    }
+
+    const index = Math.abs(hash) % dohas.length;
+    return dohas[index];
+}
+
 export function getPaginatedDohas(page: number, limit: number) {
     const dohas = getDohas();
     const startIndex = (page - 1) * limit;

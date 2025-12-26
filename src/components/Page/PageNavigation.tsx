@@ -23,7 +23,7 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
         if (onReceiveDoha) {
             onReceiveDoha()
         } else {
-            router.push(`/?randomDoha=true&t=${Date.now()}`)
+            router.push(`/?randomDoha=true&daily=true&t=${Date.now()}`)
         }
     }
 
@@ -51,7 +51,7 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
                     className='bg-serene-accent text-white font-sans font-semibold py-3 px-6 rounded-2xl hover:bg-serene-accent/90 hover:shadow-lg transition-all duration-300 active:scale-95 flex items-center gap-3'
                 >
                     <FontAwesomeIcon icon={faLeaf} className="text-white/90" />
-                    <span>Receive a Doha</span>
+                    <span>Doha of the Day</span>
                 </button>
             )}
         </div>

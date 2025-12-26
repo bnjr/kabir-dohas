@@ -45,6 +45,11 @@ const DohaQueryPage = () => {
     router.push(`/doha-query?searchQuery=${encodeURIComponent(searchInput)}`)
   }
 
+  const handleChipClick = (mood: string) => {
+    setSearchInput(mood)
+    router.push(`/doha-query?searchQuery=${encodeURIComponent(mood)}`)
+  }
+
   return (
     <>
       <SEOHead title="Search Results" />
@@ -55,15 +60,19 @@ const DohaQueryPage = () => {
       ) : (
         <>
           <div className="flex flex-col items-center mt-8 w-full max-w-2xl mx-auto px-4 sm:px-6">
-            <h1 className="text-3xl font-serif font-semibold mb-8 text-serene-text text-center tracking-tight">
+            <h1 className="text-3xl font-serif font-semibold mb-2 text-serene-text text-center tracking-tight">
               Seeking wisdom on...
             </h1>
+            <p className="text-serene-muted mb-8 text-center font-sans">
+              Ask a question or select a theme to explore Kabir's teachings.
+            </p>
             <SearchBar
               searchInput={searchInput}
               handleSearchInputChange={handleSearchInputChange}
               handleAskKabir={handleAskKabir}
+              onChipClick={handleChipClick}
             />
-            <hr className="w-full mt-10 mb-8 border-t border-serene-accent/10" />
+            <hr className="w-full mb-8 border-t border-serene-accent/10" />
           </div>
           {loading && (
             <div className="flex justify-center items-center mt-8">

@@ -44,11 +44,12 @@ const useFetchDohas = () => {
     }
   }
 
-  const fetchRandomDoha = async () => {
+  const fetchRandomDoha = async (isDaily: boolean = false) => {
     setLoading(true)
     setError(null)
     try {
-      const response = await fetch('/api/randomdoha')
+      const url = isDaily ? '/api/randomdoha?daily=true' : '/api/randomdoha'
+      const response = await fetch(url)
       const doha: DohaData = await response.json()
       return doha
     } catch (error) {

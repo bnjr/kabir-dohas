@@ -3,7 +3,7 @@ import path from 'path';
 import { getPassageEmbeddings } from '../lib/embeddings';
 
 // Configuration
-const CSV_PATH = path.join(process.cwd(), 'dohas', 'kabir-dohas.csv');
+const CSV_PATH = path.join(process.cwd(), 'src', 'data', 'source', 'kabir-dohas.csv');
 const OUTPUT_PATH = path.join(process.cwd(), 'src', 'data', 'dohas_with_embeddings.json');
 
 /**
