@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { DohaData } from '@/types/types'
 import SEOHead from '@/components/SEO/SEOHead'
 import Doha from '@/components/Doha/Doha'
-import DohasPageButtons from '@/components/Page/DohasPageButtons'
+import PageNavigation from '@/components/Page/PageNavigation'
 import DohaSkeleton from '@/components/Doha/DohaSkeleton'
 import useFetchDohas from '@/hooks/useFetchDohas'
 import useDebouncedWindowHeight from '@/hooks/useDebouncedWindowHeight'
@@ -73,7 +73,11 @@ const DohasPage = () => {
           An error occurred: {error}
         </div>
       )}
-      <DohasPageButtons fetchMoreDohas={fetchMoreDohas} />
+      <PageNavigation
+        showExpandCollection
+        onExpandCollection={fetchMoreDohas}
+        showBrowseCollections={false}
+      />
     </>
   )
 }

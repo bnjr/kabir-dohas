@@ -42,7 +42,13 @@ const Home = () => {
 
   const handleAskKabir = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    router.push(`/doha-query?searchQuery=${encodeURIComponent(searchInput)}`)
+    if (searchInput.trim()) {
+      router.push(`/doha-query?searchQuery=${encodeURIComponent(searchInput.trim())}`)
+    }
+  }
+
+  const handleChipClick = (mood: string) => {
+    router.push(`/doha-query?searchQuery=${encodeURIComponent(mood)}`)
   }
 
   return (
@@ -74,6 +80,7 @@ const Home = () => {
                 searchInput={searchInput}
                 handleSearchInputChange={handleSearchInputChange}
                 handleAskKabir={handleAskKabir}
+                onChipClick={handleChipClick}
               />
               <hr className="w-full mt-10 mb-8 border-t border-serene-accent/10" />
             </div>

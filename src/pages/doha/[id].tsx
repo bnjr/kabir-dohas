@@ -1,7 +1,7 @@
 import { GetServerSideProps } from 'next'
 import { DohaData } from '@/types/types'
 import SEOHead from '@/components/SEO/SEOHead'
-import DohaPageButtons from '@/components/Page/DohaPageButtons'
+import PageNavigation from '@/components/Page/PageNavigation'
 import Doha from '@/components/Doha/Doha'
 
 interface DohaPageProps {
@@ -20,7 +20,7 @@ const DohaPage: React.FC<DohaPageProps> = ({ dohaData }) => {
         dohaData={dohaData}
       />
       {dohaData && <Doha dohaData={dohaData} loading={false} details />}
-      <DohaPageButtons />
+      <PageNavigation />
     </>
   )
 }
