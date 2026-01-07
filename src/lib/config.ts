@@ -26,6 +26,12 @@ export const config = {
         dohaListPageSize: 5,
     },
 
+    /** Cache settings */
+    cache: {
+        embeddingTTL: 1000 * 60 * 60, // 1 hour
+        embeddingMaxSize: 500,
+    },
+
     /** Search placeholder text */
     searchPlaceholder: 'Ask about life, peace, or truth...',
 

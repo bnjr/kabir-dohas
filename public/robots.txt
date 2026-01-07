@@ -6,4 +6,4 @@ Allow: /
 Disallow: /api/
 
 # Sitemap location
-Sitemap: https://kabir-dohas.vercel.app/api/sitemap.xml
+Sitemap: https://kabir.ckoapp.com/api/sitemap.xml

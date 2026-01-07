@@ -119,4 +119,26 @@ This document records the analysis, requests, and decisions made during the deve
 - [x] Config centralized
 - [x] Build verified
 
+## [2026-01-07] Embeddings Caching Optimization
+
+### User Request
+"Caching the doha embeddings more aggressively can be explored" - User wanted to optimize query performance.
+
+### Technical Action
+- **LRU Cache**: Added in-memory cache for query embeddings in `embeddings.ts`.
+- **Cache Settings**: 500 entries max, 1 hour TTL with LRU eviction.
+- **Logging**: Added console logs for cache hits/misses to monitor effectiveness.
+- **Config**: Added `cache` section to `lib/config.ts`.
+
+### Expected Impact
+- **Mood chip queries** (Peace, Love, Ego, etc.) become instant on second use.
+- **Repeated queries** skip the 100-500ms embedding computation.
+
+### Verification Results
+- Build passes with no errors.
+
+### Status
+- [x] Embedding cache implemented
+- [x] Build verified
+
 
