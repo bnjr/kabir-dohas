@@ -34,11 +34,13 @@
         - `Header/`: Header, burger menu, and profile components.
         - `Footer/`: Footer component.
         - `Page/`: Unified navigation (`PageNavigation.tsx`).
-        - `Find/`: Search and Mood components.
-        - `Layouts/`: Layout wrappers.
+        - `Find/`: Mood chips (`MoodChips.tsx`) and synopsis display.
+        - `Layouts/`: Layout wrappers (`MainLayout.tsx`, `SearchPageLayout.tsx`).
         - `SEO/`: SEO meta components.
-        - `Utils/`: Utility components.
+        - `Utils/`: Utility components (`Spinner.tsx`).
+        - `ui/`: **UI Kit** - Reusable primitives (`Input`, `Card`, `Chip`, `Divider`, `Button`, `AudioButton`, `ShareButtons`).
     - **`lib/`**: Core logic and integrations.
+        - `config.ts`: **Centralized app configuration** (moods, messages, pagination).
         - `dohaStore.ts`: In-memory storage for dohas.
         - `embeddings.ts`: Local embedding generation using Transformers.js.
         - `vectorSearch.ts`: Vector similarity logic.
@@ -47,8 +49,14 @@
         - `cache.ts`: Caching utilities.
         - `incrementDohaViews.ts`: View count logic.
     - **`context/`**: React contexts (`AuthContext.tsx`, `FavoriteContext.tsx`).
-    - **`hooks/`**: Custom React hooks (`useFetchDohas.ts`, `useDohaViews.ts`, `useOutsideClick.ts`).
+    - **`hooks/`**: Custom React hooks.
+        - `useFetchDohas.ts`: API calls for doha fetching.
+        - `useDohaSearch.ts`: Search state and navigation logic.
+        - `useDohaViews.ts`, `useOutsideClick.ts`, `useDebouncedWindowHeight.ts`.
     - **`types/`**: TypeScript type definitions.
+        - `doha.types.ts`: Doha-related types (`DohaData`, `Favorite`, `Synopsis`).
+        - `api.types.ts`: API types (`PaginatedResponse`, `ApiError`).
+        - `index.ts`: Re-exports all types.
     - **`data/`**: Data files.
         - `dohas_with_embeddings.json`: Pre-computed doha embeddings.
         - `source/`: Original doha source files (CSV, XLSX).

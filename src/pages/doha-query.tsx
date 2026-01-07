@@ -1,11 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import SEOHead from '@/components/SEO/SEOHead'
-import Spinner from '@/components/Utils/Spinner'
 import SynopsisCard from '@/components/Find/SynopsisCard'
-import PageNavigation from '@/components/Page/PageNavigation'
+import SearchPageLayout from '@/components/Layouts/SearchPageLayout'
 import useFetchDohas from '@/hooks/useFetchDohas'
-import SearchBar from '@/components/Find/SearchBar'
 
 const DohaQueryPage = () => {
   const [searchInput, setSearchInput] = useState<string>('')
@@ -58,36 +56,22 @@ const DohaQueryPage = () => {
           An error occurred: {error}
         </div>
       ) : (
-        <>
-          <div className="flex flex-col items-center mt-8 w-full max-w-2xl mx-auto px-4 sm:px-6">
-            <h1 className="text-3xl font-serif font-semibold mb-2 text-serene-text text-center tracking-tight">
-              Seeking wisdom on...
-            </h1>
-            <p className="text-serene-muted mb-8 text-center font-sans">
-              Ask a question or select a theme to explore Kabir's teachings.
-            </p>
-            <SearchBar
-              searchInput={searchInput}
-              handleSearchInputChange={handleSearchInputChange}
-              handleAskKabir={handleAskKabir}
-              onChipClick={handleChipClick}
-            />
-            <hr className="w-full mb-8 border-t border-serene-accent/10" />
-          </div>
-          {loading && (
-            <div className="flex justify-center items-center mt-8">
-              <Spinner />
-              <p className="text-lg font-sans text-serene-accent ml-4 animate-pulse">
-                Consulting the ancient verses...
-              </p>
-            </div>
-          )}
+        <SearchPageLayout
+          title="Seeking wisdom on..."
+          subtitle="Ask a question or select a theme to explore Kabir's teachings."
+          searchInput={searchInput}
+          onSearchInputChange={handleSearchInputChange}
+          onSearchSubmit={handleAskKabir}
+          onChipClick={handleChipClick}
+          loading={loading}
+          loadingMessage="Consulting the ancient verses..."
+        >
           {synopsis && <SynopsisCard synopsis={synopsis} />}
-          <PageNavigation />
-        </>
+        </SearchPageLayout>
       )}
     </>
   )
 }
 
 export default DohaQueryPage
+

@@ -31,7 +31,7 @@ const PageNavigation: React.FC<PageNavigationProps> = ({
     }
 
     return (
-        <div className='flex flex-wrap justify-center gap-4 mt-12 mb-8 px-4'>
+        <div className='flex flex-wrap justify-center gap-4 mt-4 mb-8 px-4'>
             {showSearch && (
                 <Button variant='secondary' icon={faMagnifyingGlass} href='/'>
                     Search

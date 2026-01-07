@@ -8,6 +8,10 @@
   --color-serene-muted: #7A8A75;
   --color-serene-card: #FFFFFF;
 
+  /* Spacing design tokens */
+  --spacing-section: 1rem;
+  --spacing-element: 0.5rem;
+
   --font-serif: "Cormorant Garamond", serif;
   --font-sans: "Outfit", sans-serif;
 }
@@ -41,4 +45,9 @@ body {
   background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(8px);
   border: 2px solid rgba(74, 93, 63, 0.25);
+}
+
+/* Hide scrollbar for horizontal scroll containers */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }

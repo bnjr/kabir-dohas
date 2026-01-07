@@ -73,3 +73,50 @@ This document records the analysis, requests, and decisions made during the deve
 - [x] API routes consolidated in `app/api`
 - [x] Legacy code removed
 - [x] Verified compatibility with existing client-side hooks
+
+## [2026-01-07] Search Layout Architecture Refactor
+
+### User Request
+"Any suggestions to change the architecture so that you can do a better job" - User requested architectural improvements after mobile layout issues were identified.
+
+### Technical Action
+- **Unified Layout Component**: Created `SearchPageLayout.tsx` to handle all search-related page layouts with mobile-first design.
+- **Component Extraction**: Extracted `MoodChips.tsx` as a reusable component with horizontal scroll and hidden scrollbar.
+- **Design Tokens**: Added spacing tokens (`--spacing-section`, `--spacing-element`) to `globals.css`.
+- **Page Refactoring**: Simplified `index.tsx` and `doha-query.tsx` by delegating layout to the shared component.
+- **Mobile UX Fixes**: Loading indicators and results now appear immediately visible without scrolling on mobile.
+
+### Verification Results
+- Build passes with no TypeScript or ESLint errors.
+- Hot reload confirmed working with `npm run dev`.
+
+### Status
+- [x] SearchPageLayout component created
+- [x] MoodChips extracted
+- [x] Pages refactored
+- [x] Build verified
+
+## [2026-01-07] Comprehensive Architecture Improvements
+
+### User Request
+"Any architecture change that will help the app and make your maintenance and update task easier?" - User requested comprehensive improvements.
+
+### Technical Action
+- **UI Kit Components**: Created reusable primitives (`Input`, `Card`, `Chip`, `Divider`) in `/components/ui/`.
+- **Types Consolidation**: Organized types into `doha.types.ts` and `api.types.ts` with re-exports from `index.ts`.
+- **Search Hook**: Created `useDohaSearch.ts` hook to extract search state and navigation logic.
+- **Centralized Config**: Created `lib/config.ts` with moods, messages, pagination settings, and placeholders.
+- **Component Updates**: Updated `SearchPageLayout` and `MoodChips` to use new components and config.
+
+### Verification Results
+- Build passes with no TypeScript or ESLint errors.
+- All components using centralized config for consistency.
+
+### Status
+- [x] UI Kit created (Input, Card, Chip, Divider)
+- [x] Types consolidated
+- [x] useDohaSearch hook created
+- [x] Config centralized
+- [x] Build verified
+
+
